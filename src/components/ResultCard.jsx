@@ -1,0 +1,96 @@
+/**
+ * Tarjeta de resultado final con indicadores de convergencia.
+ */
+import React from 'react';
+import { motion } from 'framer-motion';
+import { CheckCircle2, XCircle, Hash, Gauge } from 'lucide-react';
+import MathFormula from './MathFormula';
+import { formatNumber, formatPercent } from '../utils/numberFormat';
+
+export default function ResultCard({ result }) {
+  if (!result) return null;
+
+  const { root, converged, message, iterations } = result;
+  const iterCount = iterations?.length || 0;
+  const finalError = iterations?.length > 0 ? iterations[iterations.length - 1].error : null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.35 }}
+      className={converged ? 'animated-border' : ''}
+    >
+      <div
+        className={`p-6 rounded-[13px] ${
+          converged
+            ? 'bg-gradient-to-br from-emerald-500/10 to-sky-500/5'
+            : 'bg-gradient-to-br from-rose-500/10 to-amber-500/5'
+        }`}
+      >
+        <div className="flex items-start gap-4 mb-5">
+          {converged ? (
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+            </div>
+          ) : (
+            <div className="w-11 h-11 rounded-xl bg-rose-500/15 flex items-center justify-center shrink-0">
+              <XCircle className="w-6 h-6 text-rose-400" />
+            </div>
+          )}
+          <div>
+            <h2 className="text-xl font-display font-semibold text-[var(--color-text)]">
+              {converged ? 'Convergencia alcanzada' : 'Sin convergencia'}
+            </h2>
+            <p className="text-sm text-[var(--color-text-muted)] mt-1 leading-relaxed">{message}</p>
+          </div>
+        </div>
+
+        {root !== null && root !== undefined && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-text-subtle)] mb-2">
+                Raíz aproximada
+              </p>
+              <p className="font-mono text-lg font-semibold text-sky-400">
+                {typeof root === 'number' ? formatNumber(root) : root}
+              </p>
+              {typeof root === 'number' && (
+                <div className="mt-2 pt-2 border-t border-[var(--color-border)]">
+                  <MathFormula tex={`x \\approx ${formatNumber(root)}`} />
+                </div>
+              )}
+            </div>
+            <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+              <div className="flex items-center gap-2 mb-2">
+                <Hash className="w-4 h-4 text-violet-400" />
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-text-subtle)]">
+                  Iteraciones
+                </p>
+              </div>
+              <p className="font-mono text-lg font-semibold text-violet-300">{iterCount}</p>
+            </div>
+            <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+              <div className="flex items-center gap-2 mb-2">
+                <Gauge className="w-4 h-4 text-amber-400" />
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-text-subtle)]">
+                  Error relativo
+                </p>
+              </div>
+              <p className={`font-mono text-lg font-semibold ${getErrorTone(finalError)}`}>
+                {formatPercent(finalError)}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+function getErrorTone(error) {
+  if (error == null) return 'text-[var(--color-text-muted)]';
+  if (error < 0.01) return 'text-emerald-400';
+  if (error < 1) return 'text-amber-400';
+  return 'text-rose-400';
+}

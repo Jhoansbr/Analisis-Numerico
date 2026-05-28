@@ -1,0 +1,191 @@
+/**
+ * methodsData.js
+ * Contains metadata for all available numerical methods.
+ * Used to render the home page cards and method page headers.
+ */
+import {
+  GitBranch,
+  Target,
+  TrendingDown,
+  RefreshCw,
+  Spline,
+} from 'lucide-react';
+
+const methodsData = [
+  {
+    id: 'bisection',
+    name: 'Método de Bisección',
+    shortDesc: 'Encuentra raíces dividiendo intervalos sucesivamente. Un método robusto y confiable basado en el Teorema del Valor Intermedio.',
+    icon: GitBranch,
+    color: 'from-cyan-500 to-teal-500',
+    colorHex: '#06b6d4',
+    path: '/bisection',
+    theory: {
+      definition: 'El método de bisección es un algoritmo de búsqueda de raíces que divide repetidamente un intervalo por la mitad y selecciona el subintervalo donde la función cambia de signo, garantizando convergencia hacia una raíz.',
+      objective: 'Encontrar una raíz de f(x) = 0 dentro de un intervalo [a, b] donde f(a) y f(b) tienen signos opuestos.',
+      when: 'Se utiliza cuando se conoce un intervalo que contiene una raíz y se requiere un método simple y convergente. Es ideal para funciones continuas.',
+      advantages: [
+        'Siempre converge si se elige un intervalo válido',
+        'Simple de implementar y entender',
+        'No requiere calcular derivadas',
+        'Robusto para funciones continuas',
+      ],
+      disadvantages: [
+        'Convergencia lenta (lineal)',
+        'Solo encuentra una raíz por intervalo',
+        'Requiere que f(a) · f(b) < 0',
+        'No aprovecha la información de la forma de la función',
+      ],
+      formula: 'x_r = \\frac{a + b}{2}',
+      errorFormula: '\\varepsilon = \\left| \\frac{x_r^{\\text{nuevo}} - x_r^{\\text{anterior}}}{x_r^{\\text{nuevo}}} \\right| \\times 100\\%',
+    },
+    defaultValues: {
+      func: 'x^3 - 4*x - 9',
+      a: 2,
+      b: 3,
+      tol: 0.001,
+      maxIter: 50,
+    },
+  },
+  {
+    id: 'newton',
+    name: 'Newton-Raphson',
+    shortDesc: 'Método iterativo que usa la derivada para convergir rápidamente hacia la raíz mediante aproximaciones tangenciales.',
+    icon: Target,
+    color: 'from-violet-500 to-purple-500',
+    colorHex: '#8b5cf6',
+    path: '/newton',
+    theory: {
+      definition: 'El método de Newton-Raphson utiliza la tangente de la función en un punto para aproximar la raíz. En cada iteración, se calcula la intersección de la recta tangente con el eje x.',
+      objective: 'Encontrar una raíz de f(x) = 0 partiendo de una estimación inicial x₀, usando la derivada f\'(x) para guiar la convergencia.',
+      when: 'Se utiliza cuando se necesita convergencia rápida y la función es diferenciable. Ideal cuando se tiene una buena estimación inicial.',
+      advantages: [
+        'Convergencia cuadrática (muy rápida)',
+        'Eficiente para funciones suaves',
+        'Pocas iteraciones necesarias',
+        'Alta precisión en pocas iteraciones',
+      ],
+      disadvantages: [
+        'Requiere calcular la derivada f\'(x)',
+        'Puede divergir con mala estimación inicial',
+        'Falla si f\'(x) = 0 en algún punto',
+        'No garantiza convergencia global',
+      ],
+      formula: 'x_{n+1} = x_n - \\frac{f(x_n)}{f\'(x_n)}',
+      errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+    },
+    defaultValues: {
+      func: 'x^3 - 4*x - 9',
+      x0: 2.5,
+      tol: 0.001,
+      maxIter: 50,
+    },
+  },
+  {
+    id: 'secant',
+    name: 'Método de la Secante',
+    shortDesc: 'Variación de Newton-Raphson que aproxima la derivada usando dos puntos previos, sin necesidad de calcularla explícitamente.',
+    icon: TrendingDown,
+    color: 'from-amber-500 to-orange-500',
+    colorHex: '#f59e0b',
+    path: '/secant',
+    theory: {
+      definition: 'El método de la secante es similar al de Newton-Raphson, pero en lugar de usar la derivada exacta, la aproxima mediante la pendiente de la recta secante que pasa por dos puntos consecutivos de la función.',
+      objective: 'Encontrar una raíz de f(x) = 0 usando dos estimaciones iniciales x₀ y x₁, sin necesidad de calcular derivadas.',
+      when: 'Se utiliza cuando la derivada es difícil o costosa de calcular, pero se desea una convergencia más rápida que la bisección.',
+      advantages: [
+        'No requiere calcular derivadas',
+        'Convergencia superlineal (orden ≈ 1.618)',
+        'Más rápido que bisección',
+        'Simple de implementar',
+      ],
+      disadvantages: [
+        'No garantiza convergencia',
+        'Puede fallar si f(x₀) ≈ f(x₁)',
+        'Requiere dos estimaciones iniciales',
+        'Menos robusto que bisección',
+      ],
+      formula: 'x_{n+1} = x_n - f(x_n) \\cdot \\frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}',
+      errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+    },
+    defaultValues: {
+      func: 'x^3 - 4*x - 9',
+      x0: 2,
+      x1: 3,
+      tol: 0.001,
+      maxIter: 50,
+    },
+  },
+  {
+    id: 'fixed-point',
+    name: 'Método de Punto Fijo',
+    shortDesc: 'Resuelve ecuaciones con una función iterativa g(x), aplicando xₙ₊₁ = g(xₙ) hasta cumplir la tolerancia.',
+    icon: RefreshCw,
+    color: 'from-pink-500 to-rose-500',
+    colorHex: '#f43f5e',
+    path: '/fixed-point',
+    theory: {
+      definition: 'El método de punto fijo transforma la ecuación f(x)=0 en x=g(x) y genera una sucesión iterativa xₙ₊₁=g(xₙ). Si g cumple condiciones de contracción cerca de la raíz, la sucesión converge.',
+      objective: 'Encontrar un valor x* tal que x* = g(x*), equivalente a una raíz de la ecuación original.',
+      when: 'Se utiliza cuando es posible despejar la variable y construir una función g(x) adecuada que converja desde un valor inicial cercano.',
+      advantages: [
+        'Implementación sencilla',
+        'No requiere derivadas',
+        'Permite distintas reformulaciones de la ecuación',
+        'Útil como introducción a métodos iterativos',
+      ],
+      disadvantages: [
+        'No siempre converge',
+        'Depende fuertemente de la elección de g(x)',
+        'Suele converger más lento que Newton',
+        'Puede divergir con malas aproximaciones iniciales',
+      ],
+      formula: 'x_{n+1} = g(x_n)',
+      errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+    },
+    defaultValues: {
+      g: 'cos(x)',
+      x0: 0.5,
+      tol: 0.001,
+      maxIter: 50,
+    },
+  },
+  {
+    id: 'lagrange',
+    name: 'Interpolación de Lagrange',
+    shortDesc: 'Construye un polinomio que pasa exactamente por un conjunto de puntos dados, permitiendo estimar valores intermedios.',
+    icon: Spline,
+    color: 'from-emerald-500 to-green-500',
+    colorHex: '#10b981',
+    path: '/lagrange',
+    theory: {
+      definition: 'La interpolación de Lagrange construye un polinomio de grado n-1 que pasa exactamente por n puntos dados. Cada punto contribuye con un polinomio base L_i(x).',
+      objective: 'Dado un conjunto de puntos (x₀, y₀), (x₁, y₁), ..., (xₙ, yₙ), encontrar el polinomio P(x) que pase por todos ellos y permita estimar valores intermedios.',
+      when: 'Se utiliza cuando se tienen datos discretos y se desea estimar valores intermedios o construir una aproximación continua de los datos.',
+      advantages: [
+        'Fórmula explícita y directa',
+        'No requiere resolver sistemas de ecuaciones',
+        'El polinomio pasa exactamente por los puntos',
+        'Útil para interpolación con pocos puntos',
+      ],
+      disadvantages: [
+        'Fenómeno de Runge con muchos puntos',
+        'Inestabilidad numérica con grados altos',
+        'Recálculo completo al agregar puntos',
+        'No adecuado para extrapolación',
+      ],
+      formula: 'P(x) = \\sum_{i=0}^{n} y_i \\cdot L_i(x), \\quad L_i(x) = \\prod_{\\substack{j=0 \\\\ j \\neq i}}^{n} \\frac{x - x_j}{x_i - x_j}',
+    },
+    defaultValues: {
+      points: [
+        { x: 1, y: 1 },
+        { x: 2, y: 4 },
+        { x: 3, y: 9 },
+        { x: 4, y: 16 },
+      ],
+      xEval: 2.5,
+    },
+  },
+];
+
+export default methodsData;
