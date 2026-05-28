@@ -4,6 +4,7 @@
  * Returns step-by-step data for educational display.
  */
 import { evaluateExpression } from '../utils/mathParser';
+import { formatNumber, roundNumber } from '../utils/numberFormat';
 
 /**
  * Solves f(x) = 0 using the Secant method.
@@ -36,22 +37,29 @@ export function solveSecant(func, x0, x1, tol = 1e-6, maxIter = 100) {
     const xNext = xCurr - fCurr * (xCurr - xPrev) / (fCurr - fPrev);
     const error = Math.abs((xNext - xCurr) / xNext) * 100;
 
+    const xPrevR = roundNumber(xPrev);
+    const xCurrR = roundNumber(xCurr);
+    const fPrevR = roundNumber(fPrev);
+    const fCurrR = roundNumber(fCurr);
+    const xNextR = roundNumber(xNext);
+    const errorR = roundNumber(error);
+
     iterations.push({
       iteration: i,
-      xPrev: xPrev,
-      xCurr: xCurr,
-      fPrev: fPrev,
-      fCurr: fCurr,
-      xNext: xNext,
-      error: error,
-      formula: `x_{${i + 1}} = ${xCurr.toFixed(5)} - ${fCurr.toFixed(5)} \\cdot \\frac{${xCurr.toFixed(5)} - ${xPrev.toFixed(5)}}{${fCurr.toFixed(5)} - ${fPrev.toFixed(5)}} = ${xNext.toFixed(5)}`,
+      xPrev: xPrevR,
+      xCurr: xCurrR,
+      fPrev: fPrevR,
+      fCurr: fCurrR,
+      xNext: xNextR,
+      error: errorR,
+      formula: `x_{${i + 1}} = ${formatNumber(xCurrR)} - ${formatNumber(fCurrR)} \\cdot \\frac{${formatNumber(xCurrR)} - ${formatNumber(xPrevR)}}{${formatNumber(fCurrR)} - ${formatNumber(fPrevR)}} = ${formatNumber(xNextR)}`,
     });
 
     // Check convergence
     if (error < tol || Math.abs(fCurr) < Number.EPSILON) {
       return {
         iterations,
-        root: xNext,
+        root: xNextR,
         converged: true,
         message: `Solución encontrada en ${i} ${i === 1 ? 'iteración' : 'iteraciones'}, dentro de la tolerancia indicada.`,
       };
@@ -63,7 +71,7 @@ export function solveSecant(func, x0, x1, tol = 1e-6, maxIter = 100) {
 
   return {
     iterations,
-    root: xCurr,
+    root: roundNumber(xCurr),
     converged: false,
     message: `No se alcanzó la tolerancia en ${maxIter} iteraciones. Ajusta x₀, x₁ o la tolerancia.`,
   };

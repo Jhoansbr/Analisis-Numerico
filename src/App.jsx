@@ -11,6 +11,7 @@ import NewtonPage from './pages/NewtonPage';
 import SecantPage from './pages/SecantPage';
 import FixedPointPage from './pages/FixedPointPage';
 import LagrangePage from './pages/LagrangePage';
+import Simpson38Page from './pages/Simpson38Page';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/secant" element={<SecantPage />} />
           <Route path="/fixed-point" element={<FixedPointPage />} />
           <Route path="/lagrange" element={<LagrangePage />} />
+          <Route path="/simpson38" element={<Simpson38Page />} />
         </Route>
       </Routes>
     </BrowserRouter>

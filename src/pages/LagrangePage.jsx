@@ -47,8 +47,8 @@ function DataTable({ points }) {
           {points.map((pt, i) => (
             <tr key={i} className="border-b border-[var(--color-border)]/50 hover:bg-white/[0.02]">
               <td className="px-4 py-3 font-mono text-xs text-sky-400">{i}</td>
-              <td className="px-4 py-3 font-mono text-xs">{pt.x}</td>
-              <td className="px-4 py-3 font-mono text-xs">{pt.y}</td>
+              <td className="px-4 py-3 font-mono text-xs">{formatNumber(pt.x)}</td>
+              <td className="px-4 py-3 font-mono text-xs">{formatNumber(pt.y)}</td>
             </tr>
           ))}
         </tbody>

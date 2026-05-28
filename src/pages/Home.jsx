@@ -33,7 +33,7 @@ export default function Home() {
             <span className="gradient-text"> con claridad</span>
           </h1>
           <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Resuelve problemas de raíces e interpolación con fórmulas bien presentadas,
+            Resuelve problemas de raíces, interpolación e integración con fórmulas bien presentadas,
             desarrollo iterativo detallado y gráficas que puedes explorar.
           </p>
         </div>

@@ -4,6 +4,7 @@
  * Returns step-by-step data for educational display.
  */
 import { evaluateExpression, evaluateDerivative, getDerivative } from '../utils/mathParser';
+import { formatNumber, roundNumber } from '../utils/numberFormat';
 
 /**
  * Solves f(x) = 0 using the Newton-Raphson method.
@@ -46,21 +47,27 @@ export function solveNewton(func, x0, tol = 1e-6, maxIter = 100) {
     const xn1 = xn - fxn / fpxn;
     const error = Math.abs((xn1 - xn) / xn1) * 100;
 
+    const xnR = roundNumber(xn);
+    const fxnR = roundNumber(fxn);
+    const fpxnR = roundNumber(fpxn);
+    const xn1R = roundNumber(xn1);
+    const errorR = roundNumber(error);
+
     iterations.push({
       iteration: i,
-      xn: xn,
-      fxn: fxn,
-      fpxn: fpxn,
-      xn1: xn1,
-      error: error,
-      formula: `x_{${i}} = ${xn.toFixed(5)} - \\frac{${fxn.toFixed(5)}}{${fpxn.toFixed(5)}} = ${xn1.toFixed(5)}`,
+      xn: xnR,
+      fxn: fxnR,
+      fpxn: fpxnR,
+      xn1: xn1R,
+      error: errorR,
+      formula: `x_{${i}} = ${formatNumber(xnR)} - \\frac{${formatNumber(fxnR)}}{${formatNumber(fpxnR)}} = ${formatNumber(xn1R)}`,
     });
 
     // Check convergence
     if (error < tol || Math.abs(fxn) < Number.EPSILON) {
       return {
         iterations,
-        root: xn1,
+        root: xn1R,
         converged: true,
         message: `Solución encontrada en ${i} ${i === 1 ? 'iteración' : 'iteraciones'}, dentro de la tolerancia indicada.`,
         derivativeStr,
@@ -72,7 +79,7 @@ export function solveNewton(func, x0, tol = 1e-6, maxIter = 100) {
 
   return {
     iterations,
-    root: xn,
+    root: roundNumber(xn),
     converged: false,
     message: `No se alcanzó la tolerancia en ${maxIter} iteraciones. Prueba otro valor inicial o relaja la tolerancia.`,
     derivativeStr,

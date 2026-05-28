@@ -9,6 +9,7 @@ import {
   TrendingDown,
   RefreshCw,
   Spline,
+  AreaChart,
 } from 'lucide-react';
 
 const methodsData = [
@@ -184,6 +185,46 @@ const methodsData = [
         { x: 4, y: 16 },
       ],
       xEval: 2.5,
+    },
+  },
+  {
+    id: 'simpson38',
+    name: 'Regla de Simpson 3/8',
+    shortDesc: 'Aproxima integrales definidas con polinomios cúbicos en paneles de tres subintervalos, refinando n hasta cumplir la tolerancia.',
+    icon: AreaChart,
+    color: 'from-indigo-500 to-blue-500',
+    colorHex: '#6366f1',
+    path: '/simpson38',
+    theory: {
+      definition:
+        'La regla de Simpson 3/8 integra sobre tres subintervalos iguales usando un polinomio cúbico. En forma compuesta, el número de subintervalos n debe ser múltiplo de 3 y los coeficientes 1, 3, 3, 2 se repiten en cada panel.',
+      objective:
+        'Calcular una aproximación de ∫ₐᵇ f(x) dx dividiendo [a, b] en n subintervalos (n múltiplo de 3) y aplicando la fórmula compuesta de Simpson 3/8.',
+      when:
+        'Se utiliza cuando la función es suave en [a, b] y se busca mayor precisión que el trapecio o Simpson 1/3 con el mismo número de evaluaciones en ciertos casos.',
+      advantages: [
+        'Buena precisión para funciones suaves',
+        'Fórmula cerrada y fácil de programar',
+        'Error controlable aumentando n',
+        'Adecuada para integración educativa paso a paso',
+      ],
+      disadvantages: [
+        'Requiere que n sea múltiplo de 3',
+        'No es adaptativa por sí sola',
+        'Puede fallar con funciones no suaves o singulares',
+        'El error depende de la cuarta derivada de f',
+      ],
+      formula:
+        'I \\approx \\frac{3h}{8} \\left[ f(x_0) + f(x_n) + \\sum_{\\substack{i=1 \\\\ i \\not\\equiv 0 \\pmod{3}}}^{n-1} 3f(x_i) + \\sum_{\\substack{i=1 \\\\ i \\equiv 0 \\pmod{3}}}^{n-1} 2f(x_i) \\right], \\quad h = \\frac{b-a}{n}',
+      errorFormula:
+        '\\varepsilon = \\left| \\frac{I_{\\text{nuevo}} - I_{\\text{anterior}}}{I_{\\text{nuevo}}} \\right| \\times 100\\%',
+    },
+    defaultValues: {
+      func: 'x^2',
+      a: 0,
+      b: 1,
+      tol: 0.001,
+      maxIter: 50,
     },
   },
 ];

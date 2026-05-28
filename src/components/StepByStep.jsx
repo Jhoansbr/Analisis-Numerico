@@ -108,6 +108,31 @@ function FixedPointDetail({ step }) {
   );
 }
 
+function Simpson38Detail({ step }) {
+  return (
+    <div className="space-y-3 text-sm">
+      <div className="grid grid-cols-3 gap-3">
+        <ValueBox label="n" value={step.n} tone="text-sky-400" />
+        <ValueBox label="h" value={step.h} tone="text-violet-400" />
+        <ValueBox label="Integral I" value={step.integral} tone="text-emerald-400" />
+      </div>
+      <div className="p-3 rounded-lg bg-emerald-500/8 border border-emerald-500/20">
+        <p className="text-xs text-emerald-300/90">{step.detail}</p>
+      </div>
+      <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
+        <p className="text-xs text-[var(--color-text-muted)] mb-2">Fórmula compuesta</p>
+        <MathFormula tex={step.formula} block />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <ValueBox label="Σ cᵢ·f(xᵢ)" value={step.weightedSum} tone="text-amber-400" />
+        {step.error !== null && (
+          <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-400" isString />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LagrangeDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
@@ -136,6 +161,7 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber }
     secant: SecantDetail,
     'fixed-point': FixedPointDetail,
     lagrange: LagrangeDetail,
+    simpson38: Simpson38Detail,
   };
   const Detail = detailMap[methodType];
   const label = step.iteration ?? step.index + 1;

@@ -3,6 +3,7 @@
  * Implements Lagrange Interpolation.
  * Returns step-by-step data and the resulting polynomial for educational display.
  */
+import { roundNumber } from '../utils/numberFormat';
 
 function formatLinearTerm(xj) {
   if (xj === 0) return 'x';
@@ -53,13 +54,13 @@ export function solveLagrange(points, xEval = null) {
 
     steps.push({
       index: i,
-      xi: points[i].x,
-      yi: points[i].y,
+      xi: roundNumber(points[i].x),
+      yi: roundNumber(points[i].y),
       numerator: numeratorForDisplay.join(' · '),
       denominator: denominatorForDisplay.join(' · '),
-      denominatorValue: denominatorValue,
-      liValue: liValue,
-      contribution: liValue !== null ? liValue * points[i].y : null,
+      denominatorValue: roundNumber(denominatorValue),
+      liValue: liValue !== null ? roundNumber(liValue) : null,
+      contribution: liValue !== null ? roundNumber(liValue * points[i].y) : null,
       latex: `L_{${i}}(x) = \\frac{${numeratorForDisplay.join(' \\cdot ')}}{${denominatorForDisplay.join(' \\cdot ')}}`,
     });
   }
@@ -67,7 +68,7 @@ export function solveLagrange(points, xEval = null) {
   // Compute the final result
   let result = null;
   if (xEval !== null) {
-    result = steps.reduce((sum, step) => sum + step.contribution, 0);
+    result = roundNumber(steps.reduce((sum, step) => sum + step.contribution, 0));
   }
 
   // Build a descriptive polynomial string
@@ -77,8 +78,8 @@ export function solveLagrange(points, xEval = null) {
     steps,
     polynomial,
     result,
-    points,
-    xEval,
+    points: points.map((p) => ({ x: roundNumber(p.x), y: roundNumber(p.y) })),
+    xEval: xEval !== null ? roundNumber(xEval) : null,
   };
 }
 

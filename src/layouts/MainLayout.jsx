@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Menu, X, GitBranch, Target, TrendingDown, RefreshCw, Spline, Sigma } from 'lucide-react';
+import { Home, Menu, X, GitBranch, Target, TrendingDown, RefreshCw, Spline, AreaChart, Sigma } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Inicio', icon: Home },
@@ -13,6 +13,7 @@ const navItems = [
   { path: '/secant', label: 'Secante', icon: TrendingDown },
   { path: '/fixed-point', label: 'Punto fijo', icon: RefreshCw },
   { path: '/lagrange', label: 'Lagrange', icon: Spline },
+  { path: '/simpson38', label: 'Simpson 3/8', icon: AreaChart },
 ];
 
 export default function MainLayout() {
@@ -141,6 +142,7 @@ function getCurrentPageName(pathname) {
     '/secant': 'Método de la secante',
     '/fixed-point': 'Método de punto fijo',
     '/lagrange': 'Interpolación de Lagrange',
+    '/simpson38': 'Regla de Simpson 3/8',
   };
   return map[pathname] || 'NumLab';
 }

@@ -4,6 +4,7 @@
  * Returns step-by-step data for educational display.
  */
 import { evaluateExpression } from '../utils/mathParser';
+import { roundNumber } from '../utils/numberFormat';
 
 /**
  * Solves f(x) = 0 using the Bisection method.
@@ -31,10 +32,10 @@ export function solveBisection(func, a, b, tol = 1e-6, maxIter = 100) {
 
   // Check if one of the endpoints is already a root
   if (Math.abs(fa) < Number.EPSILON) {
-    return { iterations: [], root: a, converged: true, message: 'El valor a ya es una raíz exacta de la función.' };
+    return { iterations: [], root: roundNumber(a), converged: true, message: 'El valor a ya es una raíz exacta de la función.' };
   }
   if (Math.abs(fb) < Number.EPSILON) {
-    return { iterations: [], root: b, converged: true, message: 'El valor b ya es una raíz exacta de la función.' };
+    return { iterations: [], root: roundNumber(b), converged: true, message: 'El valor b ya es una raíz exacta de la función.' };
   }
 
   let prevXr = null;
@@ -46,13 +47,13 @@ export function solveBisection(func, a, b, tol = 1e-6, maxIter = 100) {
 
     iterations.push({
       iteration: i,
-      a: a,
-      b: b,
-      xr: xr,
-      fa: evaluateExpression(func, a),
-      fb: evaluateExpression(func, b),
-      fxr: fxr,
-      error: error,
+      a: roundNumber(a),
+      b: roundNumber(b),
+      xr: roundNumber(xr),
+      fa: roundNumber(evaluateExpression(func, a)),
+      fb: roundNumber(evaluateExpression(func, b)),
+      fxr: roundNumber(fxr),
+      error: error !== null ? roundNumber(error) : null,
       sign: fa * fxr < 0 ? 'f(a)·f(xr) < 0 → raíz en [a, xr]' : 'f(xr)·f(b) < 0 → raíz en [xr, b]',
     });
 
@@ -60,7 +61,7 @@ export function solveBisection(func, a, b, tol = 1e-6, maxIter = 100) {
     if (Math.abs(fxr) < Number.EPSILON || (error !== null && error < tol)) {
       return {
         iterations,
-        root: xr,
+        root: roundNumber(xr),
         converged: true,
         message: `Solución encontrada en ${i} ${i === 1 ? 'iteración' : 'iteraciones'}, dentro de la tolerancia indicada.`,
       };
@@ -81,7 +82,7 @@ export function solveBisection(func, a, b, tol = 1e-6, maxIter = 100) {
   const lastXr = iterations[iterations.length - 1].xr;
   return {
     iterations,
-    root: lastXr,
+    root: roundNumber(lastXr),
     converged: false,
     message: `No se alcanzó la tolerancia en ${maxIter} iteraciones. Puedes aumentar el máximo de iteraciones o ajustar la tolerancia.`,
   };

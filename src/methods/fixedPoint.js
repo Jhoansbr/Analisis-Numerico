@@ -4,6 +4,7 @@
  * Returns step-by-step data for educational display.
  */
 import { evaluateExpression } from '../utils/mathParser';
+import { formatNumber, roundNumber } from '../utils/numberFormat';
 
 /**
  * Solves x = g(x) using the Fixed Point method.
@@ -31,19 +32,23 @@ export function solveFixedPoint(gFunc, x0, tol = 1e-6, maxIter = 100) {
 
     const error = Math.abs((xn1 - xn) / xn1) * 100;
 
+    const xnR = roundNumber(xn);
+    const xn1R = roundNumber(xn1);
+    const errorR = roundNumber(error);
+
     iterations.push({
       iteration: i,
-      xn,
-      gx: xn1,
-      xn1,
-      error,
-      formula: `x_{${i + 1}} = g(${xn.toFixed(5)}) = ${xn1.toFixed(5)}`,
+      xn: xnR,
+      gx: xn1R,
+      xn1: xn1R,
+      error: errorR,
+      formula: `x_{${i + 1}} = g(${formatNumber(xnR)}) = ${formatNumber(xn1R)}`,
     });
 
     if (error < tol) {
       return {
         iterations,
-        root: xn1,
+        root: xn1R,
         converged: true,
         message: `Solución encontrada en ${i} ${i === 1 ? 'iteración' : 'iteraciones'}, dentro de la tolerancia indicada.`,
       };
@@ -54,7 +59,7 @@ export function solveFixedPoint(gFunc, x0, tol = 1e-6, maxIter = 100) {
 
   return {
     iterations,
-    root: xn,
+    root: roundNumber(xn),
     converged: false,
     message: `No se alcanzó la tolerancia en ${maxIter} iteraciones. Ajusta g(x), x₀ o la tolerancia.`,
   };
