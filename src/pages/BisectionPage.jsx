@@ -7,6 +7,7 @@ import { Play, RotateCcw, GitBranch, CheckCircle2, ListOrdered, Table, LineChart
 import methodsData from '../data/methodsData';
 import { solveBisection } from '../methods/bisection';
 import { generatePlotData } from '../utils/mathParser';
+import { parseNumberInput } from '../utils/numberFormat';
 import TheorySection from '../components/TheorySection';
 import StepByStep from '../components/StepByStep';
 import IterativeTable from '../components/IterativeTable';
@@ -24,8 +25,8 @@ const columns = [
   { key: 'b', label: 'b' },
   { key: 'xr', label: 'xᵣ' },
   { key: 'fxr', label: 'f(xᵣ)' },
-  { key: 'error', label: 'Error (%)' },
-  { key: 'sign', label: 'Intervalo siguiente' },
+  { key: 'error', label: 'ε = |xᵣ−xᵣ₋₁|/2' },
+  { key: 'assignment', label: 'Actualización' },
 ];
 
 export default function BisectionPage() {
@@ -33,18 +34,29 @@ export default function BisectionPage() {
   const [func, setFunc] = useState(defaults.func);
   const [a, setA] = useState(defaults.a);
   const [b, setB] = useState(defaults.b);
+  const [stopMode, setStopMode] = useState(defaults.stopMode);
   const [tol, setTol] = useState(defaults.tol);
   const [maxIter, setMaxIter] = useState(defaults.maxIter);
   const [result, setResult] = useState(null);
   const [plotData, setPlotData] = useState(null);
 
   const handleSolve = useCallback(() => {
-    const res = solveBisection(func, Number(a), Number(b), Number(tol), Number(maxIter));
+    const aNum = parseNumberInput(a);
+    const bNum = parseNumberInput(b);
+    const maxIterNum = parseNumberInput(maxIter);
+    const tolNum = parseNumberInput(tol);
+
+    const res = solveBisection(
+      func,
+      aNum,
+      bNum,
+      stopMode === 'tolerance'
+        ? { stopMode, tol: tolNum }
+        : { stopMode, maxIter: maxIterNum },
+    );
     setResult(res);
 
-    if (res.iterations.length > 0) {
-      const aNum = Number(a);
-      const bNum = Number(b);
+    if (res.iterations.length > 0 && Number.isFinite(aNum) && Number.isFinite(bNum)) {
       const margin = (bNum - aNum) * 0.5;
       const plot = generatePlotData(func, aNum - margin, bNum + margin);
       const approxPoints = res.iterations.map((it) => ({ x: it.xr, y: it.fxr }));
@@ -56,12 +68,13 @@ export default function BisectionPage() {
     } else {
       setPlotData(null);
     }
-  }, [func, a, b, tol, maxIter]);
+  }, [func, a, b, stopMode, tol, maxIter]);
 
   const handleReset = () => {
     setFunc(defaults.func);
     setA(defaults.a);
     setB(defaults.b);
+    setStopMode(defaults.stopMode);
     setTol(defaults.tol);
     setMaxIter(defaults.maxIter);
     setResult(null);
@@ -83,15 +96,49 @@ export default function BisectionPage() {
       <TheorySection theory={methodInfo.theory} />
 
       <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card p-6">
-        <h2 className="text-lg font-display font-semibold mb-1">Datos del problema</h2>
-        <p className="text-xs text-[var(--color-text-subtle)] mb-5">Define f(x) y el intervalo [a, b] con signos opuestos.</p>
+        <h2 className="text-lg font-display font-semibold mb-5">Datos del problema</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <InputField label="Función f(x)" value={func} onChange={setFunc} placeholder="x^3 - 4*x - 9" mono hint="Usa ^ para potencias y * para multiplicar" />
-          <InputField label="Límite a" value={a} onChange={setA} type="number" placeholder="2" />
-          <InputField label="Límite b" value={b} onChange={setB} type="number" placeholder="3" />
-          <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" placeholder="0.001" />
-          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" placeholder="50" />
+          <InputField label="Función f(x)" value={func} onChange={setFunc} mono />
+          <InputField label="Límite a" value={a} onChange={setA} type="number" />
+          <InputField label="Límite b" value={b} onChange={setB} type="number" />
         </div>
+
+        <div className="mt-6 pt-6 border-t border-[var(--color-border)]">
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button
+              type="button"
+              onClick={() => setStopMode('tolerance')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                stopMode === 'tolerance'
+                  ? 'bg-sky-500/15 border-sky-500/40 text-sky-300'
+                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:bg-white/[0.03]'
+              }`}
+            >
+              Por tolerancia ε
+            </button>
+            <button
+              type="button"
+              onClick={() => setStopMode('iterations')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                stopMode === 'iterations'
+                  ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:bg-white/[0.03]'
+              }`}
+            >
+              Por número de iteraciones
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {stopMode === 'tolerance' ? (
+              <InputField label="Tolerancia ε" value={tol} onChange={setTol} type="number" />
+            ) : (
+              <InputField label="Número de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
+            )}
+          </div>
+        </div>
+
         <div className="flex flex-wrap gap-3 mt-6">
           <button type="button" onClick={handleSolve} className="btn-primary">
             <Play className="w-4 h-4" /> Calcular
@@ -114,7 +161,7 @@ export default function BisectionPage() {
               id: 'result',
               label: 'Resultado',
               icon: CheckCircle2,
-              content: <ResultCard result={result} />,
+              content: <ResultCard result={result} errorFormat="absolute" />,
             },
             {
               id: 'steps',
@@ -122,7 +169,7 @@ export default function BisectionPage() {
               icon: ListOrdered,
               content: (
                 <div className="p-5">
-                  <StepByStep steps={result.iterations} methodType="bisection" embedded />
+                  <StepByStep steps={result.iterations} methodType="bisection" embedded errorFormat="absolute" />
                 </div>
               ),
             },
@@ -130,15 +177,15 @@ export default function BisectionPage() {
               id: 'table',
               label: 'Tabla',
               icon: Table,
-              content: <IterativeTable columns={columns} data={result.iterations} embedded />,
+              content: <IterativeTable columns={columns} data={result.iterations} embedded errorFormat="absolute" />,
             },
             {
               id: 'chart',
               label: 'Gráfica',
               icon: LineChart,
-              content: plotData ? <InteractivePlot data={plotData} title="Bisección" embedded /> : (
-                <p className="p-6 text-sm text-[var(--color-text-muted)]">No hay datos para graficar.</p>
-              ),
+              content: plotData ? (
+                <InteractivePlot data={plotData} title="Bisección" embedded />
+              ) : null,
             },
           ]}
         />

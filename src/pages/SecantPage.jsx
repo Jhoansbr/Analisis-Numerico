@@ -15,6 +15,7 @@ import ResultCard from '../components/ResultCard';
 import ResultsTabs from '../components/ResultsTabs';
 import InputField from '../components/ui/InputField';
 import AlertBanner from '../components/ui/AlertBanner';
+import { parseNumberInput } from '../utils/numberFormat';
 
 const methodInfo = methodsData.find((m) => m.id === 'secant');
 
@@ -39,7 +40,13 @@ export default function SecantPage() {
   const [plotData, setPlotData] = useState(null);
 
   const handleSolve = useCallback(() => {
-    const res = solveSecant(func, Number(x0), Number(x1), Number(tol), Number(maxIter));
+    const res = solveSecant(
+      func,
+      parseNumberInput(x0),
+      parseNumberInput(x1),
+      parseNumberInput(tol),
+      parseNumberInput(maxIter),
+    );
     setResult(res);
 
     if (res.iterations.length > 0) {
@@ -82,14 +89,13 @@ export default function SecantPage() {
       <TheorySection theory={methodInfo.theory} />
 
       <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card p-6">
-        <h2 className="text-lg font-display font-semibold mb-1">Datos del problema</h2>
-        <p className="text-xs text-[var(--color-text-subtle)] mb-5">Dos aproximaciones iniciales distintas para comenzar el método.</p>
+        <h2 className="text-lg font-display font-semibold mb-5">Datos del problema</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <InputField label="Función f(x)" value={func} onChange={setFunc} placeholder="x^3 - 4*x - 9" mono />
-          <InputField label="Valor x₀" value={x0} onChange={setX0} type="number" placeholder="2" />
-          <InputField label="Valor x₁" value={x1} onChange={setX1} type="number" placeholder="3" />
-          <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" placeholder="0.001" />
-          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" placeholder="50" />
+          <InputField label="Función f(x)" value={func} onChange={setFunc} mono />
+          <InputField label="Valor x₀" value={x0} onChange={setX0} type="number" />
+          <InputField label="Valor x₁" value={x1} onChange={setX1} type="number" />
+          <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" />
+          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
         </div>
         <div className="flex flex-wrap gap-3 mt-6">
           <button type="button" onClick={handleSolve} className="btn-primary">
@@ -132,9 +138,7 @@ export default function SecantPage() {
               icon: LineChart,
               content: plotData ? (
                 <InteractivePlot data={plotData} title="Método de la secante" embedded />
-              ) : (
-                <p className="p-6 text-sm text-[var(--color-text-muted)]">No hay datos para graficar.</p>
-              ),
+              ) : null,
             },
           ]}
         />

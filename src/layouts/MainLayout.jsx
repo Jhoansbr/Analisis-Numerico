@@ -88,7 +88,6 @@ function SidebarContent({ onClose }) {
           </div>
           <div>
             <p className="text-sm font-bold text-[var(--color-text)] font-display">NumLab</p>
-            <p className="text-[10px] text-[var(--color-text-subtle)] -mt-0.5">Métodos numéricos</p>
           </div>
         </div>
         {onClose && (
@@ -125,11 +124,6 @@ function SidebarContent({ onClose }) {
         })}
       </nav>
 
-      <div className="p-3 border-t border-[var(--color-border)]">
-        <p className="text-[11px] text-[var(--color-text-subtle)] leading-relaxed px-1">
-          Herramienta educativa con teoría, cálculo paso a paso y gráficas.
-        </p>
-      </div>
     </div>
   );
 }

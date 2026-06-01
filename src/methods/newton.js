@@ -45,7 +45,7 @@ export function solveNewton(func, x0, tol = 1e-6, maxIter = 100) {
     }
 
     const xn1 = xn - fxn / fpxn;
-    const error = Math.abs((xn1 - xn) / xn1) * 100;
+    const relError = Math.abs((xn1 - xn) / xn1);
 
     const xnR = roundNumber(xn);
     const fxnR = roundNumber(fxn);
@@ -61,10 +61,15 @@ export function solveNewton(func, x0, tol = 1e-6, maxIter = 100) {
       xn1: xn1R,
       error: errorR,
       formula: `x_{${i}} = ${formatNumber(xnR)} - \\frac{${formatNumber(fxnR)}}{${formatNumber(fpxnR)}} = ${formatNumber(xn1R)}`,
+      xn: xn,
+      fxn: fxn,
+      fpxn: fpxn,
+      xn1: xn1,
+      error: relError * 100,
+      formula: `x_{${i}} = ${xn.toFixed(5)} - \\frac{${fxn.toFixed(5)}}{${fpxn.toFixed(5)}} = ${xn1.toFixed(5)}`,
     });
 
-    // Check convergence
-    if (error < tol || Math.abs(fxn) < Number.EPSILON) {
+    if (relError < tol || Math.abs(fxn) < Number.EPSILON) {
       return {
         iterations,
         root: xn1R,

@@ -2,14 +2,13 @@
  * Tabla de iteraciones con resaltado de convergencia.
  */
 import React from 'react';
-import { Table, TrendingDown } from 'lucide-react';
+import { Table } from 'lucide-react';
 import { formatNumber, formatPercent } from '../utils/numberFormat';
 
-export default function IterativeTable({ columns, data, highlightLast = true, embedded = false }) {
+export default function IterativeTable({ columns, data, highlightLast = true, embedded = false, errorFormat = 'percent' }) {
   if (!data || data.length === 0) return null;
 
   const lastIdx = data.length - 1;
-  const lastError = data[lastIdx]?.error;
 
   const table = (
     <div className="overflow-x-auto">
@@ -43,7 +42,7 @@ export default function IterativeTable({ columns, data, highlightLast = true, em
                       col.key === 'iteration' ? 'text-sky-400 font-semibold' : 'text-[var(--color-text-secondary)]'
                     } ${col.key === 'error' && row[col.key] !== null ? getErrorColor(row[col.key]) : ''}`}
                   >
-                    {formatValue(row[col.key], col.key)}
+                    {formatValue(row[col.key], col.key, errorFormat)}
                   </td>
                 ))}
               </tr>
@@ -55,19 +54,7 @@ export default function IterativeTable({ columns, data, highlightLast = true, em
   );
 
   if (embedded) {
-    return (
-      <div>
-        {lastError != null && (
-          <div className="flex items-center gap-2 px-4 py-2 mb-0 text-xs border-b border-[var(--color-border)] bg-emerald-500/5">
-            <TrendingDown className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-emerald-300/90">
-              Última iteración — error relativo: {formatPercent(lastError)}
-            </span>
-          </div>
-        )}
-        {table}
-      </div>
-    );
+    return table;
   }
 
   return (
@@ -86,11 +73,13 @@ export default function IterativeTable({ columns, data, highlightLast = true, em
   );
 }
 
-function formatValue(value, key) {
+function formatValue(value, key, errorFormat) {
   if (value === null || value === undefined) return '—';
   if (key === 'iteration') return value;
-  if (key === 'error') return formatPercent(value);
-  if (key === 'sign') return value;
+  if (key === 'error') {
+    return errorFormat === 'absolute' ? formatNumber(value) : formatPercent(value);
+  }
+  if (key === 'sign' || key === 'assignment') return value;
   if (typeof value === 'number') return formatNumber(value);
   return String(value);
 }

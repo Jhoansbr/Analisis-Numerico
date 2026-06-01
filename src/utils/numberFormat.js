@@ -20,6 +20,14 @@ export function formatNumber(value, maxDecimals = MAX_DECIMALS) {
 }
 
 export function formatPercent(value, maxDecimals = MAX_DECIMALS) {
+/** Convierte entrada de formulario; '' no se trata como 0. */}
+export function parseNumberInput(value) {
+  if (value === '' || value === null || value === undefined) return NaN;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+export function formatPercent(value, maxDecimals = 5) {
   if (value === null || value === undefined) return '—';
   if (typeof value !== 'number' || !Number.isFinite(value)) return String(value);
   return `${formatNumber(value, maxDecimals)}%`;

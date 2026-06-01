@@ -11,7 +11,7 @@ import StepByStep from '../components/StepByStep';
 import InteractivePlot from '../components/InteractivePlot';
 import ResultsTabs from '../components/ResultsTabs';
 import MathFormula from '../components/MathFormula';
-import { formatNumber } from '../utils/numberFormat';
+import { formatNumber, parseNumberInput } from '../utils/numberFormat';
 
 const methodInfo = methodsData.find((m) => m.id === 'lagrange');
 
@@ -24,9 +24,6 @@ function LagrangeResult({ result }) {
         <div className="text-center py-2">
           <MathFormula tex={`P(${formatNumber(result.xEval)}) = ${formatNumber(result.result)}`} block />
         </div>
-        <p className="text-sm text-[var(--color-text-muted)] text-center mt-4">
-          Polinomio construido a partir de {result.points.length} puntos.
-        </p>
       </div>
     </div>
   );
@@ -65,8 +62,7 @@ export default function LagrangePage() {
   const [plotData, setPlotData] = useState(null);
 
   const addPoint = () => {
-    const lastX = points.length > 0 ? points[points.length - 1].x + 1 : 0;
-    setPoints([...points, { x: lastX, y: 0 }]);
+    setPoints([...points, { x: '', y: '' }]);
   };
 
   const removePoint = (idx) => {
@@ -76,22 +72,26 @@ export default function LagrangePage() {
 
   const updatePoint = (idx, field, value) => {
     const next = [...points];
-    next[idx] = { ...next[idx], [field]: Number(value) };
+    next[idx] = { ...next[idx], [field]: value };
     setPoints(next);
   };
 
   const handleSolve = useCallback(() => {
-    const res = solveLagrange(points, Number(xEval));
+    const numericPoints = points.map((p) => ({
+      x: parseNumberInput(p.x),
+      y: parseNumberInput(p.y),
+    }));
+    const res = solveLagrange(numericPoints, parseNumberInput(xEval));
     setResult(res);
 
-    const xs = points.map((p) => p.x);
+    const xs = numericPoints.map((p) => p.x);
     const minX = Math.min(...xs) - 1;
     const maxX = Math.max(...xs) + 1;
-    const curve = generateLagrangePlotData(points, minX, maxX);
+    const curve = generateLagrangePlotData(numericPoints, minX, maxX);
 
     const traces = [
       { x: curve.xValues, y: curve.yValues, type: 'scatter', mode: 'lines', name: 'P(x)', line: { color: '#34d399', width: 2 } },
-      { x: points.map((p) => p.x), y: points.map((p) => p.y), type: 'scatter', mode: 'markers', name: 'Puntos', marker: { color: '#38bdf8', size: 10 } },
+      { x: numericPoints.map((p) => p.x), y: numericPoints.map((p) => p.y), type: 'scatter', mode: 'markers', name: 'Puntos', marker: { color: '#38bdf8', size: 10 } },
     ];
 
     if (res.result !== null) {
@@ -130,15 +130,14 @@ export default function LagrangePage() {
       <TheorySection theory={methodInfo.theory} />
 
       <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card p-6">
-        <h2 className="text-lg font-display font-semibold mb-1">Puntos de datos</h2>
-        <p className="text-xs text-[var(--color-text-subtle)] mb-5">Mínimo dos puntos con abscisas distintas.</p>
+        <h2 className="text-lg font-display font-semibold mb-5">Puntos de datos</h2>
         <div className="space-y-3">
           {points.map((pt, idx) => (
             <div key={idx} className="flex items-center gap-3">
-              <span className="text-xs font-mono text-[var(--color-text-subtle)] w-8">P{idx}</span>
+              <span className="text-xs font-mono text-[var(--color-text-muted)] w-8">P{idx}</span>
               <div className="flex-1 grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] text-[var(--color-text-subtle)] mb-1">x</label>
+                  <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1.5">x</label>
                   <input
                     type="number"
                     value={pt.x}
@@ -147,7 +146,7 @@ export default function LagrangePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] text-[var(--color-text-subtle)] mb-1">y</label>
+                  <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1.5">y</label>
                   <input
                     type="number"
                     value={pt.y}

@@ -38,14 +38,17 @@ const methodsData = [
         'No aprovecha la información de la forma de la función',
       ],
       formula: 'x_r = \\frac{a + b}{2}',
-      errorFormula: '\\varepsilon = \\left| \\frac{x_r^{\\text{nuevo}} - x_r^{\\text{anterior}}}{x_r^{\\text{nuevo}}} \\right| \\times 100\\%',
+      errorFormula: '\\varepsilon = \\frac{|x_r^{(k)} - x_r^{(k-1)}|}{2} < \\varepsilon_{\\text{tol}}',
+      updateRule:
+        'f(a)\\cdot f(x_r) > 0 \\Rightarrow a = x_r \\quad ; \\quad f(a)\\cdot f(x_r) < 0 \\Rightarrow b = x_r',
     },
     defaultValues: {
-      func: 'x^3 - 4*x - 9',
-      a: 2,
-      b: 3,
-      tol: 0.001,
-      maxIter: 50,
+      func: '',
+      a: '',
+      b: '',
+      stopMode: 'tolerance',
+      tol: '',
+      maxIter: '',
     },
   },
   {
@@ -76,10 +79,10 @@ const methodsData = [
       errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
     },
     defaultValues: {
-      func: 'x^3 - 4*x - 9',
-      x0: 2.5,
-      tol: 0.001,
-      maxIter: 50,
+      func: '',
+      x0: '',
+      tol: '',
+      maxIter: '',
     },
   },
   {
@@ -110,11 +113,11 @@ const methodsData = [
       errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
     },
     defaultValues: {
-      func: 'x^3 - 4*x - 9',
-      x0: 2,
-      x1: 3,
-      tol: 0.001,
-      maxIter: 50,
+      func: '',
+      x0: '',
+      x1: '',
+      tol: '',
+      maxIter: '',
     },
   },
   {
@@ -145,10 +148,10 @@ const methodsData = [
       errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
     },
     defaultValues: {
-      g: 'cos(x)',
-      x0: 0.5,
-      tol: 0.001,
-      maxIter: 50,
+      g: '',
+      x0: '',
+      tol: '',
+      maxIter: '',
     },
   },
   {
@@ -179,12 +182,10 @@ const methodsData = [
     },
     defaultValues: {
       points: [
-        { x: 1, y: 1 },
-        { x: 2, y: 4 },
-        { x: 3, y: 9 },
-        { x: 4, y: 16 },
+        { x: '', y: '' },
+        { x: '', y: '' },
       ],
-      xEval: 2.5,
+      xEval: '',
     },
   },
   {

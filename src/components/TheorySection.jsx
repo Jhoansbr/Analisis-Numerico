@@ -20,10 +20,7 @@ export default function TheorySection({ theory }) {
           <div className="w-9 h-9 rounded-lg bg-violet-500/12 flex items-center justify-center">
             <BookOpen className="w-5 h-5 text-violet-400" />
           </div>
-          <div className="text-left">
-            <h2 className="text-lg font-display font-semibold">Fundamento teórico</h2>
-            <p className="text-xs text-[var(--color-text-subtle)] mt-0.5">Definición, fórmulas y criterios de uso</p>
-          </div>
+          <h2 className="text-lg font-display font-semibold">Fundamento teórico</h2>
         </div>
         <ChevronDown className={`w-5 h-5 text-[var(--color-text-subtle)] transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>

@@ -34,12 +34,18 @@ function BisectionDetail({ step }) {
         <ValueBox label="f(b)" value={step.fb} tone="text-violet-400" />
       </div>
       <div className="p-3 rounded-lg bg-emerald-500/8 border border-emerald-500/20">
-        <p className="text-xs text-emerald-300/90">{step.sign}</p>
+        <p className="text-xs text-emerald-300/90 mb-2">{step.sign}</p>
+        {step.assignment && (
+          <p className="text-sm font-mono text-emerald-200">Siguiente intervalo: {step.assignment}</p>
+        )}
       </div>
-      {step.error !== null && (
+      {step.error !== null && step.prevXr != null && (
         <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
-          <p className="text-xs text-[var(--color-text-muted)] mb-2">Error relativo</p>
-          <MathFormula tex={`\\varepsilon = ${formatNumber(step.error)}\\%`} block />
+          <p className="text-xs text-[var(--color-text-muted)] mb-2">Error entre iteraciones</p>
+          <MathFormula
+            tex={`\\varepsilon = \\frac{|${formatNumber(step.xr)} - ${formatNumber(step.prevXr)}|}{2} = ${formatNumber(step.error)}`}
+            block
+          />
         </div>
       )}
     </div>
@@ -154,7 +160,7 @@ function LagrangeDetail({ step }) {
   );
 }
 
-function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber }) {
+function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber, errorFormat }) {
   const detailMap = {
     bisection: BisectionDetail,
     newton: NewtonDetail,
@@ -196,7 +202,9 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber }
           </span>
           {step.error != null && (
             <span className="ml-auto text-xs font-mono text-[var(--color-text-subtle)]">
-              ε = {formatPercent(step.error)}
+              {errorFormat === 'absolute'
+                ? `ε = ${formatNumber(step.error)}`
+                : `ε = ${formatPercent(step.error)}`}
             </span>
           )}
           <ChevronDown
@@ -223,7 +231,7 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber }
   );
 }
 
-export default function StepByStep({ steps, methodType, embedded = false }) {
+export default function StepByStep({ steps, methodType, embedded = false, errorFormat = 'percent' }) {
   const [expandedStep, setExpandedStep] = useState(0);
   const [showAll, setShowAll] = useState(false);
   if (!steps || steps.length === 0) return null;
@@ -242,6 +250,7 @@ export default function StepByStep({ steps, methodType, embedded = false }) {
             isLast={idx === visible.length - 1}
             isExpanded={expandedStep === idx}
             onToggle={() => setExpandedStep(expandedStep === idx ? -1 : idx)}
+            errorFormat={errorFormat}
           />
         ))}
       </div>

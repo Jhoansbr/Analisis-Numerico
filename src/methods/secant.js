@@ -35,7 +35,7 @@ export function solveSecant(func, x0, x1, tol = 1e-6, maxIter = 100) {
     }
 
     const xNext = xCurr - fCurr * (xCurr - xPrev) / (fCurr - fPrev);
-    const error = Math.abs((xNext - xCurr) / xNext) * 100;
+    const relError = Math.abs((xNext - xCurr) / xNext);
 
     const xPrevR = roundNumber(xPrev);
     const xCurrR = roundNumber(xCurr);
@@ -53,10 +53,16 @@ export function solveSecant(func, x0, x1, tol = 1e-6, maxIter = 100) {
       xNext: xNextR,
       error: errorR,
       formula: `x_{${i + 1}} = ${formatNumber(xCurrR)} - ${formatNumber(fCurrR)} \\cdot \\frac{${formatNumber(xCurrR)} - ${formatNumber(xPrevR)}}{${formatNumber(fCurrR)} - ${formatNumber(fPrevR)}} = ${formatNumber(xNextR)}`,
+      xPrev: xPrev,
+      xCurr: xCurr,
+      fPrev: fPrev,
+      fCurr: fCurr,
+      xNext: xNext,
+      error: relError * 100,
+      formula: `x_{${i + 1}} = ${xCurr.toFixed(5)} - ${fCurr.toFixed(5)} \\cdot \\frac{${xCurr.toFixed(5)} - ${xPrev.toFixed(5)}}{${fCurr.toFixed(5)} - ${fPrev.toFixed(5)}} = ${xNext.toFixed(5)}`,
     });
 
-    // Check convergence
-    if (error < tol || Math.abs(fCurr) < Number.EPSILON) {
+    if (relError < tol || Math.abs(fCurr) < Number.EPSILON) {
       return {
         iterations,
         root: xNextR,
