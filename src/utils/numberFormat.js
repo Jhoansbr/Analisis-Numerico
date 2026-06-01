@@ -19,8 +19,7 @@ export function formatNumber(value, maxDecimals = MAX_DECIMALS) {
   return Object.is(rounded, -0) ? '0' : String(rounded);
 }
 
-export function formatPercent(value, maxDecimals = MAX_DECIMALS) {
-/** Convierte entrada de formulario; '' no se trata como 0. */}
+
 export function parseNumberInput(value) {
   if (value === '' || value === null || value === undefined) return NaN;
   const n = Number(value);
