@@ -27,7 +27,8 @@ export function expressionToLatex(expr) {
  */
 export function evaluateExpression(expr, x) {
   try {
-    const node = compile(expr);
+    const cleaned = sanitizeExpression(expr);
+    const node = compile(cleaned);
     return node.evaluate({ x });
   } catch {
     return NaN;
@@ -110,9 +111,9 @@ export function generatePlotData(expr, xMin, xMax, numPoints = 300) {
  */
 export function sanitizeExpression(expr) {
   let sanitized = expr.trim();
-  // Replace common patterns
-  sanitized = sanitized.replace(/\^/g, '^');
   sanitized = sanitized.replace(/sen/gi, 'sin');
   sanitized = sanitized.replace(/ln/gi, 'log');
+  // Multiplicación implícita: 3x → 3*x, 2(x+1) → 2*(x+1)
+  sanitized = sanitized.replace(/(\d)([a-zA-Z(])/g, '$1*$2');
   return sanitized;
 }
