@@ -39,7 +39,14 @@ export default function NewtonPage() {
   const [plotData, setPlotData] = useState(null);
 
   const handleSolve = useCallback(() => {
-    const res = solveNewton(func, parseNumberInput(x0), parseNumberInput(tol), parseNumberInput(maxIter));
+    const tolNum = parseNumberInput(tol);
+    const maxIterNum = parseNumberInput(maxIter);
+    const res = solveNewton(
+      func,
+      parseNumberInput(x0),
+      Number.isFinite(tolNum) ? tolNum : undefined,
+      Number.isFinite(maxIterNum) ? maxIterNum : undefined,
+    );
     setResult(res);
 
     if (res.iterations.length > 0) {
@@ -97,7 +104,7 @@ export default function NewtonPage() {
           <InputField label="Función f(x)" value={func} onChange={setFunc} mono />
           <InputField label="Valor inicial x₀" value={x0} onChange={setX0} type="number" />
           <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" />
-          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
+          <InputField label="Número de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
         </div>
         <div className="flex flex-wrap gap-3 mt-6">
           <button type="button" onClick={handleSolve} className="btn-primary">

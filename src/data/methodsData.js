@@ -109,8 +109,10 @@ const methodsData = [
         'Requiere dos estimaciones iniciales',
         'Menos robusto que bisección',
       ],
-      formula: 'x_{n+1} = x_n - f(x_n) \\cdot \\frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}',
-      errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+      formula:
+        'x_{i+1} = x_i - \\frac{f(x_i)(x_i - x_{i-1})}{f(x_i) - f(x_{i-1})}',
+      errorFormula:
+        '\\varepsilon_a = \\left| \\frac{x_{i+1}^{(k)} - x_{i+1}^{(k-1)}}{x_{i+1}^{(k)}} \\right| \\times 100\\%',
     },
     defaultValues: {
       func: '',
@@ -145,7 +147,8 @@ const methodsData = [
         'Puede divergir con malas aproximaciones iniciales',
       ],
       formula: 'x_{n+1} = g(x_n)',
-      errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+      errorFormula:
+        'E_a = \\left| \\frac{x_i - x_{i-1}}{x_i} \\right| \\times 100',
     },
     defaultValues: {
       g: '',

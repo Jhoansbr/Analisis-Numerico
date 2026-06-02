@@ -22,7 +22,8 @@ export function formatNumber(value, maxDecimals = MAX_DECIMALS) {
 
 export function parseNumberInput(value) {
   if (value === '' || value === null || value === undefined) return NaN;
-  const n = Number(value);
+  const normalized = String(value).trim().replace(',', '.');
+  const n = Number(normalized);
   return Number.isFinite(n) ? n : NaN;
 }
 

@@ -25,11 +25,25 @@ export function expressionToLatex(expr) {
  * @param {number} x - The value of x to evaluate at
  * @returns {number} The result of the evaluation
  */
+function toRealNumber(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : NaN;
+  }
+  if (value && typeof value === 'object' && 're' in value && 'im' in value) {
+    const { re, im } = value;
+    if (Number.isFinite(re) && Number.isFinite(im) && Math.abs(im) < 1e-12) {
+      return re;
+    }
+    return NaN;
+  }
+  return NaN;
+}
+
 export function evaluateExpression(expr, x) {
   try {
     const cleaned = sanitizeExpression(expr);
     const node = compile(cleaned);
-    return node.evaluate({ x });
+    return toRealNumber(node.evaluate({ x }));
   } catch {
     return NaN;
   }
@@ -113,6 +127,8 @@ export function sanitizeExpression(expr) {
   let sanitized = expr.trim();
   sanitized = sanitized.replace(/sen/gi, 'sin');
   sanitized = sanitized.replace(/ln/gi, 'log');
+  // exp^(-x) → exp(-x) (notación común en apuntes)
+  sanitized = sanitized.replace(/exp\s*\^\s*\(/gi, 'exp(');
   // Multiplicación implícita: 3x → 3*x, 2(x+1) → 2*(x+1)
   sanitized = sanitized.replace(/(\d)([a-zA-Z(])/g, '$1*$2');
   return sanitized;

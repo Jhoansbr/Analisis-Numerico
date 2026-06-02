@@ -25,8 +25,9 @@ const columns = [
   { key: 'xCurr', label: 'xₙ' },
   { key: 'fPrev', label: 'f(xₙ₋₁)' },
   { key: 'fCurr', label: 'f(xₙ)' },
-  { key: 'xNext', label: 'xₙ₊₁' },
-  { key: 'error', label: 'Error (%)' },
+  { key: 'xNext', label: 'xᵢ₊₁' },
+  { key: 'fNext', label: 'f(xᵢ₊₁)' },
+  { key: 'error', label: 'εₐ (%)' },
 ];
 
 export default function SecantPage() {
@@ -40,12 +41,14 @@ export default function SecantPage() {
   const [plotData, setPlotData] = useState(null);
 
   const handleSolve = useCallback(() => {
+    const tolNum = parseNumberInput(tol);
+    const maxIterNum = parseNumberInput(maxIter);
     const res = solveSecant(
       func,
       parseNumberInput(x0),
       parseNumberInput(x1),
-      parseNumberInput(tol),
-      parseNumberInput(maxIter),
+      Number.isFinite(tolNum) ? tolNum : undefined,
+      Number.isFinite(maxIterNum) ? maxIterNum : undefined,
     );
     setResult(res);
 
@@ -94,8 +97,8 @@ export default function SecantPage() {
           <InputField label="Función f(x)" value={func} onChange={setFunc} mono />
           <InputField label="Valor x₀" value={x0} onChange={setX0} type="number" />
           <InputField label="Valor x₁" value={x1} onChange={setX1} type="number" />
-          <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" />
-          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
+          <InputField label="Tolerancia εₐ (%)" value={tol} onChange={setTol} type="number" />
+          <InputField label="Número de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
         </div>
         <div className="flex flex-wrap gap-3 mt-6">
           <button type="button" onClick={handleSolve} className="btn-primary">
@@ -115,14 +118,27 @@ export default function SecantPage() {
         <ResultsTabs
           defaultTab="result"
           tabs={[
-            { id: 'result', label: 'Resultado', icon: CheckCircle2, content: <div className="p-5"><ResultCard result={result} /></div> },
+            {
+              id: 'result',
+              label: 'Resultado',
+              icon: CheckCircle2,
+              content: (
+                <div className="p-5">
+                  <ResultCard result={result} />
+                </div>
+              ),
+            },
             {
               id: 'steps',
               label: 'Paso a paso',
               icon: ListOrdered,
               content: (
                 <div className="p-5">
-                  <StepByStep steps={result.iterations} methodType="secant" embedded />
+                  <StepByStep
+                    steps={result.iterations}
+                    methodType="secant"
+                    embedded
+                  />
                 </div>
               ),
             },
@@ -130,7 +146,13 @@ export default function SecantPage() {
               id: 'table',
               label: 'Tabla',
               icon: Table,
-              content: <IterativeTable columns={columns} data={result.iterations} embedded />,
+              content: (
+                <IterativeTable
+                  columns={columns}
+                  data={result.iterations}
+                  embedded
+                />
+              ),
             },
             {
               id: 'chart',

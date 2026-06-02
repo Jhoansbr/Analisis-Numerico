@@ -24,7 +24,7 @@ const columns = [
   { key: 'xn', label: 'xₙ' },
   { key: 'gx', label: 'g(xₙ)' },
   { key: 'xn1', label: 'xₙ₊₁' },
-  { key: 'error', label: 'Error (%)' },
+  { key: 'error', label: 'E_a (%)' },
 ];
 
 export default function FixedPointPage() {
@@ -37,14 +37,22 @@ export default function FixedPointPage() {
   const [plotData, setPlotData] = useState(null);
 
   const handleSolve = useCallback(() => {
-    const res = solveFixedPoint(gFunc, parseNumberInput(x0), parseNumberInput(tol), parseNumberInput(maxIter));
+    const tolNum = parseNumberInput(tol);
+    const maxIterNum = parseNumberInput(maxIter);
+    const res = solveFixedPoint(
+      gFunc,
+      parseNumberInput(x0),
+      Number.isFinite(tolNum) ? tolNum : undefined,
+      Number.isFinite(maxIterNum) ? maxIterNum : undefined,
+    );
     setResult(res);
 
     if (res.iterations.length > 0) {
+      const plotExpr = res.gFuncUsed ?? gFunc;
       const allX = res.iterations.flatMap((it) => [it.xn, it.xn1]);
       const minX = Math.min(...allX) - 2;
       const maxX = Math.max(...allX) + 2;
-      const plot = generatePlotData(gFunc, minX, maxX);
+      const plot = generatePlotData(plotExpr, minX, maxX);
       setPlotData([
         { x: plot.xValues, y: plot.yValues, type: 'scatter', mode: 'lines', name: 'g(x)', line: { color: '#f43f5e', width: 2 } },
         { x: res.iterations.map((it) => it.xn1), y: res.iterations.map((it) => it.xn1), type: 'scatter', mode: 'markers', name: 'Iteraciones (x, g(x))', marker: { color: '#38bdf8', size: 8 } },
@@ -80,10 +88,10 @@ export default function FixedPointPage() {
       <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card p-6">
         <h2 className="text-lg font-display font-semibold mb-5">Datos del problema</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <InputField label="Función g(x)" value={gFunc} onChange={setGFunc} mono />
+          <InputField label="f(x)=0 o g(x)" value={gFunc} onChange={setGFunc} mono />
           <InputField label="Valor inicial x₀" value={x0} onChange={setX0} type="number" />
           <InputField label="Tolerancia (%)" value={tol} onChange={setTol} type="number" />
-          <InputField label="Máximo de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
+          <InputField label="Número de iteraciones" value={maxIter} onChange={setMaxIter} type="number" />
         </div>
         <div className="flex flex-wrap gap-3 mt-6">
           <button type="button" onClick={handleSolve} className="btn-primary">
@@ -95,7 +103,7 @@ export default function FixedPointPage() {
         </div>
       </motion.section>
 
-      {result && !result.converged && result.iterations.length === 0 && (
+      {result && !result.converged && (
         <AlertBanner variant="warning">{result.message}</AlertBanner>
       )}
 
@@ -103,7 +111,19 @@ export default function FixedPointPage() {
         <ResultsTabs
           defaultTab="result"
           tabs={[
-            { id: 'result', label: 'Resultado', icon: CheckCircle2, content: <div className="p-5"><ResultCard result={result} /></div> },
+            {
+              id: 'result',
+              label: 'Resultado',
+              icon: CheckCircle2,
+              content: (
+                <div className="p-5 space-y-3">
+                  {result.conversionNote && (
+                    <p className="text-sm text-[var(--color-text-muted)]">{result.conversionNote}</p>
+                  )}
+                  <ResultCard result={result} />
+                </div>
+              ),
+            },
             {
               id: 'steps',
               label: 'Paso a paso',

@@ -10,21 +10,34 @@ import TheorySection from '../components/TheorySection';
 import StepByStep from '../components/StepByStep';
 import InteractivePlot from '../components/InteractivePlot';
 import ResultsTabs from '../components/ResultsTabs';
+import AlertBanner from '../components/ui/AlertBanner';
 import MathFormula from '../components/MathFormula';
 import { formatNumber, parseNumberInput } from '../utils/numberFormat';
 
 const methodInfo = methodsData.find((m) => m.id === 'lagrange');
 
 function LagrangeResult({ result }) {
-  if (result.result === null) return null;
   return (
-    <div className="animated-border">
-      <div className="p-6 rounded-[13px] bg-gradient-to-br from-emerald-500/10 to-sky-500/5">
-        <h3 className="text-lg font-display font-semibold mb-4">Valor interpolado</h3>
-        <div className="text-center py-2">
-          <MathFormula tex={`P(${formatNumber(result.xEval)}) = ${formatNumber(result.result)}`} block />
+    <div className="space-y-4">
+      <div className="animated-border">
+        <div className="p-6 rounded-[13px] bg-gradient-to-br from-emerald-500/10 to-sky-500/5">
+          <h3 className="text-lg font-display font-semibold mb-4">Polinomio interpolante</h3>
+          <div className="text-center py-2">
+            <MathFormula tex={result.polynomialLatex} block />
+          </div>
         </div>
       </div>
+
+      {result.result !== null && result.xEval !== null && (
+        <div className="animated-border">
+          <div className="p-6 rounded-[13px] bg-gradient-to-br from-amber-500/10 to-orange-500/5">
+            <h3 className="text-lg font-display font-semibold mb-4">Valor interpolado</h3>
+            <div className="text-center py-2">
+              <MathFormula tex={`P(${formatNumber(result.xEval)}) = ${formatNumber(result.result)}`} block />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -81,8 +94,17 @@ export default function LagrangePage() {
       x: parseNumberInput(p.x),
       y: parseNumberInput(p.y),
     }));
-    const res = solveLagrange(numericPoints, parseNumberInput(xEval));
+    const xEvalNum = parseNumberInput(xEval);
+    const res = solveLagrange(
+      numericPoints,
+      Number.isFinite(xEvalNum) ? xEvalNum : null,
+    );
     setResult(res);
+
+    if (!res.converged) {
+      setPlotData(null);
+      return;
+    }
 
     const xs = numericPoints.map((p) => p.x);
     const minX = Math.min(...xs) - 1;
@@ -176,7 +198,9 @@ export default function LagrangePage() {
         </button>
 
         <div className="mt-5 pt-5 border-t border-[var(--color-border)]">
-          <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1.5">Evaluar P(x) en</label>
+          <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1.5">
+            Evaluar P(x) en (opcional)
+          </label>
           <input
             type="number"
             value={xEval}
@@ -195,7 +219,11 @@ export default function LagrangePage() {
         </div>
       </motion.section>
 
-      {result && (
+      {result && !result.converged && (
+        <AlertBanner variant="warning">{result.message}</AlertBanner>
+      )}
+
+      {result && result.converged && (
         <ResultsTabs
           defaultTab="result"
           tabs={[

@@ -88,9 +88,22 @@ function SecantDetail({ step }) {
         <MathFormula tex={step.formula} block />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xₙ₊₁" value={step.xNext} tone="text-emerald-400" />
-        <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-400" isString />
+        <ValueBox label="xᵢ₊₁" value={step.xNext} tone="text-emerald-400" />
+        <ValueBox label="f(xᵢ₊₁)" value={step.fNext} tone="text-rose-400" />
       </div>
+      {step.error != null && step.xNextPrev != null && (
+        <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
+          <p className="text-xs text-[var(--color-text-muted)] mb-1">Error εₐ</p>
+          <MathFormula
+            tex={`\\varepsilon_a = \\left| \\frac{${formatNumber(step.xNext)} - ${formatNumber(step.xNextPrev)}}{${formatNumber(step.xNext)}} \\right| \\times 100`}
+            block
+          />
+          <p className="text-xs text-rose-300/90 mt-2 font-mono">εₐ = {formatPercent(step.error)}</p>
+        </div>
+      )}
+      {step.error == null && (
+        <p className="text-xs text-[var(--color-text-muted)]">Primera xᵢ₊₁: no hay εₐ (falta valor anterior).</p>
+      )}
     </div>
   );
 }
@@ -106,9 +119,19 @@ function FixedPointDetail({ step }) {
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Aplicación de la fórmula</p>
         <MathFormula tex={step.formula} block />
       </div>
+      <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
+        <p className="text-xs text-[var(--color-text-muted)] mb-1">Error aproximado</p>
+        <MathFormula tex="E_a = \left| \dfrac{x_i - x_{i-1}}{x_i} \right| \times 100" block />
+        {step.error != null && (
+          <p className="text-xs text-rose-300/90 mt-2 font-mono">
+            E_a = |({formatNumber(step.xi ?? step.xn1)} − {formatNumber(step.xPrev ?? step.xn)}) /{' '}
+            {formatNumber(step.xi ?? step.xn1)}| × 100 = {formatPercent(step.error)}
+          </p>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xₙ₊₁" value={step.xn1} tone="text-emerald-400" />
-        <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-400" isString />
+        <ValueBox label="xᵢ = xₙ₊₁" value={step.xn1} tone="text-emerald-400" />
+        <ValueBox label="E_a (%)" value={formatPercent(step.error)} tone="text-rose-400" isString />
       </div>
     </div>
   );
