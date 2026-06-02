@@ -11,6 +11,7 @@ import StepByStep from '../components/StepByStep';
 import InteractivePlot from '../components/InteractivePlot';
 import ResultsTabs from '../components/ResultsTabs';
 import AlertBanner from '../components/ui/AlertBanner';
+import MethodPageHeader from '../components/MethodPageHeader';
 import MathFormula from '../components/MathFormula';
 import { formatNumber, parseNumberInput } from '../utils/numberFormat';
 
@@ -20,7 +21,7 @@ function LagrangeResult({ result }) {
   return (
     <div className="space-y-4">
       <div className="animated-border">
-        <div className="p-6 rounded-[13px] bg-gradient-to-br from-emerald-500/10 to-sky-500/5">
+        <div className="p-4 sm:p-6 rounded-[13px] bg-emerald-500/10 border border-emerald-500/20">
           <h3 className="text-lg font-display font-semibold mb-4">Polinomio interpolante</h3>
           <div className="text-center py-2">
             <MathFormula tex={result.polynomialLatex} block />
@@ -30,7 +31,7 @@ function LagrangeResult({ result }) {
 
       {result.result !== null && result.xEval !== null && (
         <div className="animated-border">
-          <div className="p-6 rounded-[13px] bg-gradient-to-br from-amber-500/10 to-orange-500/5">
+          <div className="p-4 sm:p-6 rounded-[13px] bg-amber-500/10 border border-amber-500/20">
             <h3 className="text-lg font-display font-semibold mb-4">Valor interpolado</h3>
             <div className="text-center py-2">
               <MathFormula tex={`P(${formatNumber(result.xEval)}) = ${formatNumber(result.result)}`} block />
@@ -138,16 +139,10 @@ export default function LagrangePage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-4">
-        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${methodInfo.color} flex items-center justify-center shadow-lg`}>
-          <Spline className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-display font-bold">{methodInfo.name}</h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{methodInfo.shortDesc}</p>
-        </div>
-      </motion.header>
+    <div className="page-shell max-w-5xl space-y-5 sm:space-y-6">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <MethodPageHeader methodInfo={methodInfo} />
+      </motion.div>
 
       <TheorySection theory={methodInfo.theory} />
 

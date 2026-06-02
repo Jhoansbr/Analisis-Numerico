@@ -32,12 +32,12 @@ export default function ResultCard({ result, errorFormat = 'percent' }) {
       className={showSuccess ? 'animated-border' : ''}
     >
       <div
-        className={`p-6 rounded-[13px] ${
+        className={`p-4 sm:p-6 rounded-[13px] ${
           showSuccess
             ? completedByCount
-              ? 'bg-gradient-to-br from-amber-500/10 to-sky-500/5'
-              : 'bg-gradient-to-br from-emerald-500/10 to-sky-500/5'
-            : 'bg-gradient-to-br from-rose-500/10 to-amber-500/5'
+              ? 'bg-amber-500/10 border border-amber-500/20'
+              : 'bg-emerald-500/10 border border-emerald-500/20'
+            : 'bg-rose-500/10 border border-rose-500/20'
         }`}
       >
         <div className="flex items-start gap-4 mb-5">

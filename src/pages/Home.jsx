@@ -9,30 +9,30 @@ import methodsData from '../data/methodsData';
 
 export default function Home() {
   return (
-    <div className="max-w-6xl mx-auto space-y-10">
+    <div className="page-shell space-y-8 sm:space-y-10">
       <motion.section
-        initial={{ opacity: 0, y: -16 }}
+        initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="section-card relative overflow-hidden p-8 lg:p-12"
+        transition={{ duration: 0.45 }}
+        className="section-card p-6 sm:p-8 lg:p-10"
       >
-        <div className="absolute top-0 right-0 w-72 h-72 bg-sky-500/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-56 h-56 bg-amber-500/6 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-
-        <div className="relative z-10 max-w-2xl">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500 to-amber-500 flex items-center justify-center">
-              <Sigma className="w-6 h-6 text-white" />
+        <div className="max-w-2xl">
+          <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-5">
+            <div
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
+              style={{ backgroundColor: 'var(--color-accent)' }}
+            >
+              <Sigma className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-sky-400/90">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
               Laboratorio numérico
             </span>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-display font-bold leading-tight mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold leading-tight mb-3 sm:mb-4">
             Aprende métodos numéricos
-            <span className="gradient-text"> con claridad</span>
+            <span className="text-accent"> con claridad</span>
           </h1>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
+          <p className="text-sm sm:text-base text-[var(--color-text-muted)] leading-relaxed max-w-prose">
             Resuelve problemas de raíces, interpolación e integración con fórmulas bien presentadas,
             desarrollo iterativo detallado y gráficas que puedes explorar.
           </p>
@@ -40,8 +40,8 @@ export default function Home() {
       </motion.section>
 
       <section>
-        <h2 className="text-lg font-display font-semibold mb-4">Métodos disponibles</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h2 className="text-lg sm:text-xl font-display font-semibold mb-3 sm:mb-4">Métodos disponibles</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {methodsData.map((method, index) => (
             <MethodCard key={method.id} method={method} index={index} />
           ))}
@@ -51,23 +51,23 @@ export default function Home() {
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+        transition={{ delay: 0.2 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
       >
         {[
-          { icon: BookOpen, label: 'Teoría integrada', desc: 'Definición, fórmulas y cuándo aplicar cada método', tone: 'text-sky-400' },
-          { icon: ListOrdered, label: 'Paso a paso', desc: 'Cada iteración con sustituciones y valores numéricos', tone: 'text-amber-400' },
-          { icon: LineChart, label: 'Gráficas', desc: 'Visualiza la función, aproximaciones y el polinomio interpolante', tone: 'text-emerald-400' },
+          { icon: BookOpen, label: 'Teoría integrada', desc: 'Definición, fórmulas y cuándo aplicar cada método', tone: 'text-[var(--color-accent)]' },
+          { icon: ListOrdered, label: 'Paso a paso', desc: 'Cada iteración con sustituciones y valores numéricos', tone: 'text-[var(--color-accent-warm)]' },
+          { icon: LineChart, label: 'Gráficas', desc: 'Visualiza la función, aproximaciones y el polinomio interpolante', tone: 'text-[var(--color-success)]' },
         ].map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="section-card p-5 flex gap-4">
-              <div className={`w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center shrink-0 ${item.tone}`}>
+            <div key={item.label} className="section-card p-4 sm:p-5 flex gap-3 sm:gap-4">
+              <div className={`w-10 h-10 rounded-lg bg-[var(--color-surface-raised)] flex items-center justify-center shrink-0 ${item.tone}`}>
                 <Icon className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className={`text-sm font-semibold ${item.tone} mb-1`}>{item.label}</p>
-                <p className="text-xs text-[var(--color-text-subtle)] leading-relaxed">{item.desc}</p>
+                <p className="text-xs sm:text-sm text-[var(--color-text-subtle)] leading-relaxed">{item.desc}</p>
               </div>
             </div>
           );

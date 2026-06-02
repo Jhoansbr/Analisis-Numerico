@@ -199,7 +199,7 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber, 
     <div className="relative flex gap-4">
       {!isLast && (
         <div
-          className="absolute left-[15px] top-10 bottom-0 w-px bg-gradient-to-b from-sky-500/40 to-transparent"
+          className="absolute left-[15px] top-10 bottom-0 w-px bg-[var(--color-border)]"
           aria-hidden
         />
       )}

@@ -14,6 +14,7 @@ import InteractivePlot from '../components/InteractivePlot';
 import ResultsTabs from '../components/ResultsTabs';
 import InputField from '../components/ui/InputField';
 import AlertBanner from '../components/ui/AlertBanner';
+import MethodPageHeader from '../components/MethodPageHeader';
 import MathFormula from '../components/MathFormula';
 import { formatNumber, formatPercent } from '../utils/numberFormat';
 
@@ -33,10 +34,10 @@ function Simpson38Result({ result }) {
   return (
     <div className={result.converged ? 'animated-border' : ''}>
       <div
-        className={`p-6 rounded-[13px] ${
+        className={`p-4 sm:p-6 rounded-[13px] ${
           result.converged
-            ? 'bg-gradient-to-br from-emerald-500/10 to-sky-500/5'
-            : 'bg-gradient-to-br from-rose-500/10 to-amber-500/5'
+            ? 'bg-emerald-500/10 border border-emerald-500/20'
+            : 'bg-rose-500/10 border border-rose-500/20'
         }`}
       >
         <h3 className="text-lg font-display font-semibold mb-4">
@@ -158,16 +159,10 @@ export default function Simpson38Page() {
   const lastIteration = result?.iterations?.[result.iterations.length - 1];
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-4">
-        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${methodInfo.color} flex items-center justify-center shadow-lg`}>
-          <AreaChart className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-display font-bold">{methodInfo.name}</h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{methodInfo.shortDesc}</p>
-        </div>
-      </motion.header>
+    <div className="page-shell max-w-5xl space-y-5 sm:space-y-6">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <MethodPageHeader methodInfo={methodInfo} />
+      </motion.div>
 
       <TheorySection theory={methodInfo.theory} />
 

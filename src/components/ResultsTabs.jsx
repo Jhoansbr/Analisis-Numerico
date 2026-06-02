@@ -14,7 +14,7 @@ export default function ResultsTabs({ tabs, defaultTab }) {
 
   return (
     <div className="section-card overflow-hidden">
-      <div className="flex flex-wrap gap-1 p-2 border-b border-[var(--color-border)] bg-[var(--color-surface-raised)]/60">
+      <div className="flex flex-wrap gap-1.5 p-2 sm:p-2.5 border-b border-[var(--color-border)] bg-[var(--color-surface-raised)] overflow-x-auto">
         {available.map((tab) => {
           const Icon = tab.icon;
           const isActive = current.id === tab.id;

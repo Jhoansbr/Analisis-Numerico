@@ -22,7 +22,7 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen flex">
-      <aside className="hidden lg:flex flex-col w-60 border-r border-[var(--color-border)] bg-[var(--color-surface)] fixed h-full z-30">
+      <aside className="hidden lg:flex flex-col w-64 border-r border-[var(--color-border)] bg-[var(--color-surface)]/92 backdrop-blur-md fixed h-full z-30">
         <SidebarContent />
       </aside>
 
@@ -33,7 +33,7 @@ export default function MainLayout() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/40 z-40 lg:hidden"
               onClick={() => setSidebarOpen(false)}
             />
             <motion.aside
@@ -41,7 +41,7 @@ export default function MainLayout() {
               animate={{ x: 0 }}
               exit={{ x: -260 }}
               transition={{ type: 'spring', damping: 28 }}
-              className="fixed inset-y-0 left-0 w-60 bg-[var(--color-surface)] border-r border-[var(--color-border)] z-50 lg:hidden"
+              className="fixed inset-y-0 left-0 w-64 bg-[var(--color-surface)]/95 border-r border-[var(--color-border)] z-50 lg:hidden"
             >
               <SidebarContent onClose={() => setSidebarOpen(false)} />
             </motion.aside>
@@ -49,8 +49,8 @@ export default function MainLayout() {
         )}
       </AnimatePresence>
 
-      <div className="flex-1 lg:ml-60 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-20 h-14 border-b border-[var(--color-border)] bg-[var(--color-bg)]/85 backdrop-blur-md flex items-center px-4 lg:px-8">
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+        <header className="sticky top-0 z-20 h-16 border-b border-[var(--color-border)] bg-[var(--color-bg)]/75 backdrop-blur-md flex items-center px-4 lg:px-8">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
@@ -59,12 +59,12 @@ export default function MainLayout() {
           >
             <Menu className="w-5 h-5 text-[var(--color-text-muted)]" />
           </button>
-          <p className="text-sm font-medium text-[var(--color-text-muted)]">
+          <p className="text-sm font-medium text-[var(--color-text-secondary)] truncate min-w-0">
             {getCurrentPageName(location.pathname)}
           </p>
         </header>
 
-        <main className="flex-1 p-4 lg:p-8">
+        <main className="flex-1 p-3 sm:p-5 lg:p-6 min-w-0 overflow-x-hidden">
           <Outlet />
         </main>
 
@@ -81,9 +81,12 @@ export default function MainLayout() {
 function SidebarContent({ onClose }) {
   return (
     <div className="flex flex-col h-full">
-      <div className="h-14 flex items-center justify-between px-4 border-b border-[var(--color-border)]">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--color-border)]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-amber-500 flex items-center justify-center">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ backgroundColor: 'var(--color-accent)' }}
+          >
             <Sigma className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -97,7 +100,7 @@ function SidebarContent({ onClose }) {
         )}
       </div>
 
-      <nav className="flex-1 py-3 px-2 space-y-0.5">
+      <nav className="flex-1 py-3 px-2 space-y-1">
         <p className="text-[10px] font-semibold text-[var(--color-text-subtle)] uppercase tracking-widest px-3 py-2">
           Métodos
         </p>
@@ -110,10 +113,10 @@ function SidebarContent({ onClose }) {
               onClick={onClose}
               end={item.path === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-sky-500/12 text-sky-400 border border-sky-500/25'
-                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-white/[0.04] border border-transparent'
+                    ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/25'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-black/[0.03] border border-transparent'
                 }`
               }
             >

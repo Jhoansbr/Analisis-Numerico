@@ -15,6 +15,7 @@ import ResultCard from '../components/ResultCard';
 import ResultsTabs from '../components/ResultsTabs';
 import InputField from '../components/ui/InputField';
 import AlertBanner from '../components/ui/AlertBanner';
+import MethodPageHeader from '../components/MethodPageHeader';
 import { parseNumberInput } from '../utils/numberFormat';
 
 const methodInfo = methodsData.find((m) => m.id === 'fixed-point');
@@ -72,16 +73,10 @@ export default function FixedPointPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-4">
-        <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${methodInfo.color} flex items-center justify-center shadow-lg`}>
-          <RefreshCw className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-display font-bold">{methodInfo.name}</h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{methodInfo.shortDesc}</p>
-        </div>
-      </motion.header>
+    <div className="page-shell max-w-5xl space-y-5 sm:space-y-6">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <MethodPageHeader methodInfo={methodInfo} />
+      </motion.div>
 
       <TheorySection theory={methodInfo.theory} />
 
