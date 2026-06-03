@@ -41,6 +41,10 @@ const methodsData = [
       errorFormula: '\\varepsilon = \\frac{|x_r^{(k)} - x_r^{(k-1)}|}{2} < \\varepsilon_{\\text{tol}}',
       updateRule:
         'f(a)\\cdot f(x_r) > 0 \\Rightarrow a = x_r \\quad ; \\quad f(a)\\cdot f(x_r) < 0 \\Rightarrow b = x_r',
+      videos: [
+        { type: 'youtube', id: 'mdG6gpzE54k', title: 'Conceptos y ejemplo práctico' },
+        { type: 'youtube', id: '0WPixuL6AZU', title: 'Ejercicio resuelto paso a paso' }
+      ],
     },
     defaultValues: {
       func: '',
@@ -77,6 +81,10 @@ const methodsData = [
       ],
       formula: 'x_{n+1} = x_n - \\frac{f(x_n)}{f\'(x_n)}',
       errorFormula: '\\varepsilon = \\left| \\frac{x_{n+1} - x_n}{x_{n+1}} \\right| \\times 100\\%',
+      videos: [
+        { type: 'youtube', id: '9po1Lt0_4lw', title: 'Teoría y aplicación del método' },
+        { type: 'youtube', id: 'n53t8CtaLrM', title: 'Ejercicio resuelto' }
+      ],
     },
     defaultValues: {
       func: '',
@@ -113,6 +121,10 @@ const methodsData = [
         'x_{i+1} = x_i - \\frac{f(x_i)(x_i - x_{i-1})}{f(x_i) - f(x_{i-1})}',
       errorFormula:
         '\\varepsilon_a = \\left| \\frac{x_{i+1}^{(k)} - x_{i+1}^{(k-1)}}{x_{i+1}^{(k)}} \\right| \\times 100\\%',
+      videos: [
+        { type: 'youtube', id: 'dv6SXvX9lzw', title: 'Explicación del método de la Secante' },
+        { type: 'youtube', id: 'NsCBSQQAUo0', title: 'Ejercicio resuelto paso a paso' }
+      ],
     },
     defaultValues: {
       func: '',
@@ -149,6 +161,10 @@ const methodsData = [
       formula: 'x_{n+1} = g(x_n)',
       errorFormula:
         'E_a = \\left| \\frac{x_i - x_{i-1}}{x_i} \\right| \\times 100',
+      videos: [
+        { type: 'youtube', id: '8b75oripNyw', title: 'Fundamentos del Punto Fijo' },
+        { type: 'youtube', id: 'yZGUG2yfSDI', title: 'Ejemplo de aplicación' }
+      ],
     },
     defaultValues: {
       g: '',
@@ -182,6 +198,10 @@ const methodsData = [
         'No adecuado para extrapolación',
       ],
       formula: 'P(x) = \\sum_{i=0}^{n} y_i \\cdot L_i(x), \\quad L_i(x) = \\prod_{\\substack{j=0 \\\\ j \\neq i}}^{n} \\frac{x - x_j}{x_i - x_j}',
+      videos: [
+        { type: 'external', url: 'https://unisimonedu-my.sharepoint.com/personal/s_jurgensen_unisimon_edu_co/_layouts/15/stream.aspx?id=%2Fpersonal%2Fs%5Fjurgensen%5Funisimon%5Fedu%5Fco%2FDocuments%2FUNISIMON%2Fanalisis%20numerico%2Flagrange%20sneider%20y%20anyul%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ef109cf0a%2D8534%2D4e0f%2D834d%2D9fa106cb790d', title: 'Explicación Lagrange (Sneider y Anyul)' },
+        { type: 'youtube', id: 'Z0n1TXe2_Dc', title: 'Ejemplo de interpolación de Lagrange' }
+      ],
     },
     defaultValues: {
       points: [
@@ -222,6 +242,10 @@ const methodsData = [
         'I \\approx \\frac{3h}{8} \\left[ f(x_0) + f(x_n) + \\sum_{\\substack{i=1 \\\\ i \\not\\equiv 0 \\pmod{3}}}^{n-1} 3f(x_i) + \\sum_{\\substack{i=1 \\\\ i \\equiv 0 \\pmod{3}}}^{n-1} 2f(x_i) \\right], \\quad h = \\frac{b-a}{n}',
       errorFormula:
         '\\varepsilon = \\left| \\frac{I_{\\text{nuevo}} - I_{\\text{anterior}}}{I_{\\text{nuevo}}} \\right| \\times 100\\%',
+      videos: [
+        { type: 'youtube', id: 'mq9Q6aHP9ow', title: 'Introducción a Simpson 3/8' },
+        { type: 'youtube', id: '_t-E6QGs4Mo', title: 'Ejemplo de integración numérica' }
+      ],
     },
     defaultValues: {
       func: 'x^2',

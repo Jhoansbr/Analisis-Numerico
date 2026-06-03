@@ -12,15 +12,15 @@ const variants = {
   },
   warning: {
     icon: AlertTriangle,
-    wrap: 'border-amber-500/25 bg-amber-500/8',
-    iconClass: 'text-amber-400',
-    textClass: 'text-amber-100/90',
+    wrap: 'border-amber-500/30 bg-amber-50',
+    iconClass: 'text-amber-600',
+    textClass: 'text-amber-900',
   },
   error: {
     icon: AlertCircle,
-    wrap: 'border-rose-500/25 bg-rose-500/8',
-    iconClass: 'text-rose-400',
-    textClass: 'text-rose-100/90',
+    wrap: 'border-rose-500/30 bg-rose-50',
+    iconClass: 'text-rose-600',
+    textClass: 'text-rose-900',
   },
 };
 
