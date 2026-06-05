@@ -21,22 +21,22 @@ function BisectionDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="a" value={step.a} tone="text-sky-400" />
-        <ValueBox label="b" value={step.b} tone="text-violet-400" />
+        <ValueBox label="a" value={step.a} tone="text-sky-600" />
+        <ValueBox label="b" value={step.b} tone="text-violet-600" />
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Punto medio</p>
         <MathFormula tex={`x_r = \\frac{${formatNumber(step.a)} + ${formatNumber(step.b)}}{2} = ${formatNumber(step.xr)}`} block />
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <ValueBox label="f(a)" value={step.fa} tone="text-sky-400" />
-        <ValueBox label="f(xr)" value={step.fxr} tone="text-amber-400" />
-        <ValueBox label="f(b)" value={step.fb} tone="text-violet-400" />
+        <ValueBox label="f(a)" value={step.fa} tone="text-sky-600" />
+        <ValueBox label="f(xr)" value={step.fxr} tone="text-amber-600" />
+        <ValueBox label="f(b)" value={step.fb} tone="text-violet-600" />
       </div>
-      <div className="p-3 rounded-lg bg-emerald-500/8 border border-emerald-500/20">
-        <p className="text-xs text-emerald-300/90 mb-2">{step.sign}</p>
+      <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+        <p className="text-xs text-[var(--color-text)] font-semibold mb-2">{step.sign}</p>
         {step.assignment && (
-          <p className="text-sm font-mono text-emerald-200">Siguiente intervalo: {step.assignment}</p>
+          <p className="text-sm font-mono text-[var(--color-text)] font-bold">Siguiente intervalo: {step.assignment}</p>
         )}
       </div>
       {step.error !== null && step.prevXr != null && (
@@ -56,17 +56,17 @@ function NewtonDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-3 gap-3">
-        <ValueBox label="xₙ" value={step.xn} tone="text-sky-400" />
-        <ValueBox label="f(xₙ)" value={step.fxn} tone="text-amber-400" />
-        <ValueBox label="f′(xₙ)" value={step.fpxn} tone="text-violet-400" />
+        <ValueBox label="xₙ" value={step.xn} tone="text-sky-600" />
+        <ValueBox label="f(xₙ)" value={step.fxn} tone="text-amber-600" />
+        <ValueBox label="f′(xₙ)" value={step.fpxn} tone="text-violet-600" />
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Aplicación de la fórmula</p>
         <MathFormula tex={step.formula} block />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xₙ₊₁" value={step.xn1} tone="text-emerald-400" />
-        <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-400" isString />
+        <ValueBox label="xₙ₊₁" value={step.xn1} tone="text-emerald-700" />
+        <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-700" isString />
       </div>
     </div>
   );
@@ -76,20 +76,20 @@ function SecantDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xₙ₋₁" value={step.xPrev} tone="text-sky-400" />
-        <ValueBox label="xₙ" value={step.xCurr} tone="text-violet-400" />
+        <ValueBox label="xₙ₋₁" value={step.xPrev} tone="text-sky-600" />
+        <ValueBox label="xₙ" value={step.xCurr} tone="text-violet-600" />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="f(xₙ₋₁)" value={step.fPrev} tone="text-sky-400" />
-        <ValueBox label="f(xₙ)" value={step.fCurr} tone="text-amber-400" />
+        <ValueBox label="f(xₙ₋₁)" value={step.fPrev} tone="text-sky-600" />
+        <ValueBox label="f(xₙ)" value={step.fCurr} tone="text-amber-600" />
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Aplicación de la fórmula</p>
         <MathFormula tex={step.formula} block />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xᵢ₊₁" value={step.xNext} tone="text-emerald-400" />
-        <ValueBox label="f(xᵢ₊₁)" value={step.fNext} tone="text-rose-400" />
+        <ValueBox label="xᵢ₊₁" value={step.xNext} tone="text-emerald-700" />
+        <ValueBox label="f(xᵢ₊₁)" value={step.fNext} tone="text-rose-700" />
       </div>
       {step.error != null && step.xNextPrev != null && (
         <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
@@ -98,7 +98,7 @@ function SecantDetail({ step }) {
             tex={`\\varepsilon_a = \\left| \\frac{${formatNumber(step.xNext)} - ${formatNumber(step.xNextPrev)}}{${formatNumber(step.xNext)}} \\right| \\times 100`}
             block
           />
-          <p className="text-xs text-rose-300/90 mt-2 font-mono">εₐ = {formatPercent(step.error)}</p>
+          <p className="text-xs text-rose-800 mt-2 font-mono font-semibold">εₐ = {formatPercent(step.error)}</p>
         </div>
       )}
       {step.error == null && (
@@ -112,8 +112,8 @@ function FixedPointDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xₙ" value={step.xn} tone="text-sky-400" />
-        <ValueBox label="g(xₙ)" value={step.gx} tone="text-violet-400" />
+        <ValueBox label="xₙ" value={step.xn} tone="text-sky-600" />
+        <ValueBox label="g(xₙ)" value={step.gx} tone="text-violet-600" />
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Aplicación de la fórmula</p>
@@ -123,15 +123,15 @@ function FixedPointDetail({ step }) {
         <p className="text-xs text-[var(--color-text-muted)] mb-1">Error aproximado</p>
         <MathFormula tex="E_a = \left| \dfrac{x_i - x_{i-1}}{x_i} \right| \times 100" block />
         {step.error != null && (
-          <p className="text-xs text-rose-300/90 mt-2 font-mono">
+          <p className="text-xs text-rose-800 mt-2 font-mono font-semibold">
             E_a = |({formatNumber(step.xi ?? step.xn1)} − {formatNumber(step.xPrev ?? step.xn)}) /{' '}
             {formatNumber(step.xi ?? step.xn1)}| × 100 = {formatPercent(step.error)}
           </p>
         )}
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="xᵢ = xₙ₊₁" value={step.xn1} tone="text-emerald-400" />
-        <ValueBox label="E_a (%)" value={formatPercent(step.error)} tone="text-rose-400" isString />
+        <ValueBox label="xᵢ = xₙ₊₁" value={step.xn1} tone="text-emerald-700" />
+        <ValueBox label="E_a (%)" value={formatPercent(step.error)} tone="text-rose-700" isString />
       </div>
     </div>
   );
@@ -141,21 +141,21 @@ function Simpson38Detail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-3 gap-3">
-        <ValueBox label="n" value={step.n} tone="text-sky-400" />
-        <ValueBox label="h" value={step.h} tone="text-violet-400" />
-        <ValueBox label="Integral I" value={step.integral} tone="text-emerald-400" />
+        <ValueBox label="n" value={step.n} tone="text-sky-600" />
+        <ValueBox label="h" value={step.h} tone="text-violet-600" />
+        <ValueBox label="Integral I" value={step.integral} tone="text-emerald-700" />
       </div>
-      <div className="p-3 rounded-lg bg-emerald-500/8 border border-emerald-500/20">
-        <p className="text-xs text-emerald-300/90">{step.detail}</p>
+      <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+        <p className="text-xs text-emerald-800 font-semibold">{step.detail}</p>
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Fórmula compuesta</p>
         <MathFormula tex={step.formula} block />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label="Σ cᵢ·f(xᵢ)" value={step.weightedSum} tone="text-amber-400" />
+        <ValueBox label="Σ cᵢ·f(xᵢ)" value={step.weightedSum} tone="text-amber-600" />
         {step.error !== null && (
-          <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-400" isString />
+          <ValueBox label="Error" value={formatPercent(step.error)} tone="text-rose-700" isString />
         )}
       </div>
     </div>
@@ -166,8 +166,8 @@ function LagrangeDetail({ step }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="grid grid-cols-2 gap-3">
-        <ValueBox label={`x${step.index}`} value={step.xi} tone="text-sky-400" />
-        <ValueBox label={`y${step.index}`} value={step.yi} tone="text-violet-400" />
+        <ValueBox label={`x${step.index}`} value={step.xi} tone="text-sky-600" />
+        <ValueBox label={`y${step.index}`} value={step.yi} tone="text-violet-600" />
       </div>
       <div className="p-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)]">
         <p className="text-xs text-[var(--color-text-muted)] mb-2">Polinomio base</p>
@@ -175,8 +175,8 @@ function LagrangeDetail({ step }) {
       </div>
       {step.liValue !== null && (
         <div className="grid grid-cols-2 gap-3">
-          <ValueBox label={`L${step.index}(x)`} value={step.liValue} tone="text-amber-400" />
-          <ValueBox label="Contribución" value={step.contribution} tone="text-emerald-400" />
+          <ValueBox label={`L${step.index}(x)`} value={step.liValue} tone="text-amber-600" />
+          <ValueBox label="Contribución" value={step.contribution} tone="text-emerald-700" />
         </div>
       )}
     </div>
@@ -208,7 +208,7 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber, 
         onClick={onToggle}
         className={`relative z-10 w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-bold border-2 transition-colors ${
           isExpanded
-            ? 'bg-sky-500/20 border-sky-400 text-sky-300'
+            ? 'bg-sky-500/15 border-sky-400 text-sky-800'
             : 'bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-text-muted)]'
         }`}
       >
@@ -220,7 +220,7 @@ function StepItem({ step, methodType, isLast, isExpanded, onToggle, stepNumber, 
           onClick={onToggle}
           className="w-full flex items-center gap-2 text-left group"
         >
-          <span className="text-sm font-medium text-[var(--color-text)] group-hover:text-sky-300 transition-colors">
+          <span className="text-sm font-medium text-[var(--color-text)] group-hover:text-sky-700 transition-colors">
             Iteración {label}
           </span>
           {step.error != null && (
@@ -281,7 +281,7 @@ export default function StepByStep({ steps, methodType, embedded = false, errorF
         <button
           type="button"
           onClick={() => setShowAll(!showAll)}
-          className="w-full mt-2 py-2.5 text-sm font-medium text-sky-400 hover:text-sky-300 rounded-lg hover:bg-white/[0.03] transition-colors"
+          className="w-full mt-2 py-2.5 text-sm font-medium text-sky-700 hover:text-sky-800 rounded-lg hover:bg-sky-50 transition-colors"
         >
           {showAll ? 'Mostrar menos' : `Ver ${steps.length - 5} iteraciones más`}
         </button>
